@@ -93,7 +93,6 @@
         android:id="@+id/title_shots"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
         android:text="SHOTS"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -106,9 +105,89 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:text="GOALS"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/title_shots" />
+
+    <LinearLayout
+        android:id="@+id/away_detail"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="@+id/away_club_logo"
+        app:layout_constraintStart_toStartOf="@+id/away_club_logo"
+        app:layout_constraintTop_toBottomOf="@+id/away_club_name">
+
+        <TextView
+            android:id="@+id/away_shots"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:gravity="center_horizontal"
+            android:text="3" />
+
+        <TextView
+            android:id="@+id/as1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:text="TextView" />
+
+        <TextView
+            android:id="@+id/as"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:text="TextView" />
+
+        <TextView
+            android:id="@+id/as2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:text="TextView" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="@+id/home_club_logo"
+        app:layout_constraintStart_toStartOf="@+id/home_club_logo"
+        app:layout_constraintTop_toBottomOf="@+id/home_club_name">
+
+        <TextView
+            android:id="@+id/home_shots"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:gravity="center_horizontal"
+            android:text="3"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/hs"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:text="TextView" />
+
+        <TextView
+            android:id="@+id/hs3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:text="TextView" />
+
+        <TextView
+            android:id="@+id/hs4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:text="TextView" />
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
