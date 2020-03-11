@@ -49,25 +49,29 @@
         app:layout_constraintTop_toBottomOf="@+id/linearLayout2">
 
         <com.google.android.material.tabs.TabItem
+            android:id="@+id/match_next"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:onClick="viewNextMatch"
             android:text="@string/sekarang" />
 
 
         <com.google.android.material.tabs.TabItem
+            android:id="@+id/match_last"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:onClick="viewLastMatch"
             android:text="@string/sebelum" />
 
     </com.google.android.material.tabs.TabLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView"
-        android:layout_width="match_parent"
+    <include
+        android:id="@+id/match_fragment_container"
+        layout="@layout/fragment_match_list"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="24dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tabs" />
 

@@ -3,8 +3,9 @@ package com.example.bolaksepak.homepage;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.EditText;
 
+import com.example.bolaksepak.Match;
+import com.example.bolaksepak.MatchAdapter;
 import com.example.bolaksepak.R;
 import com.example.bolaksepak.eventdetail.EventDetailActivity;
 import com.example.bolaksepak.lastEvent;
