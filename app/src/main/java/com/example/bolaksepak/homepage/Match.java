@@ -1,4 +1,4 @@
-package com.example.bolaksepak;
+package com.example.bolaksepak.homepage;
 
 public class Match { //TODO: Kelas Sementara buat bikin recyclerView
      String date; //TODO: Ganti pake tipe data tanggal

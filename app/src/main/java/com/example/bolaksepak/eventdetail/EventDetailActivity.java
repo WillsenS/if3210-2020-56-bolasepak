@@ -1,8 +1,10 @@
-package com.example.bolaksepak;
+package com.example.bolaksepak.eventdetail;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+
+import com.example.bolaksepak.R;
 
 public class EventDetailActivity extends AppCompatActivity {
 
