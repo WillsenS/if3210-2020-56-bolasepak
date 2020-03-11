@@ -1,17 +1,17 @@
-package com.example.bolaksepak.homepage;
+package com.example.bolaksepak;
 
 import java.io.Serializable;
 
 
 @SuppressWarnings("serial")
 public class Match  implements Serializable { //TODO: Kelas Sementara buat bikin recyclerView
-    String date; //TODO: Ganti pake tipe data tanggal
-    String home_name;
-    String away_name;
-    int home_score;
-    int away_score;
-    int home_shots;
-    int away_shots;
+    public String date; //TODO: Ganti pake tipe data tanggal
+    public String home_name;
+    public String away_name;
+    public int home_score;
+    public int away_score;
+    public int home_shots;
+    public int away_shots;
 
 
 

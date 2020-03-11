@@ -3,11 +3,16 @@ package com.example.bolaksepak.teaminfo;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.bolaksepak.Match;
+import com.example.bolaksepak.MatchAdapter;
 import com.example.bolaksepak.R;
 
 /**
@@ -16,50 +21,46 @@ import com.example.bolaksepak.R;
  * create an instance of this fragment.
  */
 public class MatchListFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    RecyclerView MatchListView;
+    Match[] MatchList = new Match[10];
+    int[] clubImages = {
+            R.drawable.club1,
+            R.drawable.club2
+    };
+    MatchAdapter md;
 
     public MatchListFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment MatchListFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static MatchListFragment newInstance(String param1, String param2) {
+    public static MatchListFragment newInstance() {
         MatchListFragment fragment = new MatchListFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
+//        Bundle args = new Bundle();
+//        args.putString(ARG_PARAM1, param1);
+//        args.putString(ARG_PARAM2, param2);
+//        fragment.setArguments(args);
         return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+        for (int i = 0; i < MatchList.length; i++) {
+            MatchList[i] = new Match("99 Maret 2020", "Club 1", 1, "Club 2", 2);
         }
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_match_list, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_match_list, container, false);
+        MatchListView = (RecyclerView) rootView.findViewById(R.id.match_list_fragment);
+        this.md = new MatchAdapter(getContext(), MatchList, clubImages);
+        Log.d("this.md: ", String.valueOf(this.md));
+        MatchListView.setAdapter(this.md);
+        MatchListView.setLayoutManager(new LinearLayoutManager(getContext()));
+        return rootView;
     }
 }

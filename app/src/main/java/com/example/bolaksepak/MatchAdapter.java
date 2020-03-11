@@ -1,4 +1,4 @@
-package com.example.bolaksepak.homepage;
+package com.example.bolaksepak;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -11,14 +11,12 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.bolaksepak.R;
-
 public class MatchAdapter extends RecyclerView.Adapter<MatchAdapter.MatchHolder> {
     Context ctx;
     Match[] MatchList;
     int[] images;
 
-    MatchAdapter(Context ctx, Match[] MatchList, int[] images) {
+    public MatchAdapter(Context ctx, Match[] MatchList, int[] images) {
         this.ctx = ctx;
         this.MatchList = MatchList;
         this.images = images;
