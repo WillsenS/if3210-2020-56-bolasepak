@@ -12,11 +12,11 @@
         android:id="@+id/match_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="72dp"
         android:text="10 Maret 2020"
-        app:layout_constraintEnd_toStartOf="@+id/away_club_logo"
-        app:layout_constraintStart_toEndOf="@+id/home_club_logo"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar2" />
+        app:layout_constraintEnd_toStartOf="@+id/away_club_score"
+        app:layout_constraintStart_toEndOf="@+id/home_club_score"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
         android:id="@+id/away_club_logo"
@@ -151,6 +151,7 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/linearLayout4"
         android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
@@ -190,16 +191,5 @@
             android:gravity="center_horizontal"
             android:text="TextView" />
     </LinearLayout>
-
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar2"
-        android:layout_width="409dp"
-        android:layout_height="wrap_content"
-        android:background="?attr/colorPrimary"
-        android:minHeight="?attr/actionBarSize"
-        android:theme="?attr/actionBarTheme"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

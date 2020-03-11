@@ -1,8 +1,12 @@
 package com.example.bolaksepak.homepage;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.EditText;
 
 import com.example.bolaksepak.R;
+import com.example.bolaksepak.eventdetail.EventDetailActivity;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -31,4 +35,11 @@ public class MainActivity extends AppCompatActivity {
         MatchListView.setLayoutManager(new LinearLayoutManager(this));
     }
 
+    public void viewMatchDetail(View view) {
+        Intent intent = new Intent(this, EventDetailActivity.class);
+//        EditText editText = (EditText) findViewById(R.id.editText);
+//        String message = editText.getText().toString();
+//        intent.putExtra(EXTRA_MESSAGE, message);
+        startActivity(intent);
+    }
 }
