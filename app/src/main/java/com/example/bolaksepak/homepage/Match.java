@@ -1,11 +1,19 @@
 package com.example.bolaksepak.homepage;
 
-public class Match { //TODO: Kelas Sementara buat bikin recyclerView
-     String date; //TODO: Ganti pake tipe data tanggal
-     int home_score;
-     String home_name;
-     int away_score;
-     String away_name;
+import java.io.Serializable;
+
+
+@SuppressWarnings("serial")
+public class Match  implements Serializable { //TODO: Kelas Sementara buat bikin recyclerView
+    String date; //TODO: Ganti pake tipe data tanggal
+    String home_name;
+    String away_name;
+    int home_score;
+    int away_score;
+    int home_shots;
+    int away_shots;
+
+
 
     public Match(String d, String hn, int hs, String an, int as) {
         date = d;
