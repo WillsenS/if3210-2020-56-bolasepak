@@ -66,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void getsearchbyname() {
-        Call<List<searchByName>> call = theSportDB.getsearchByName(3); //TO DO: GANTI param
+        Call<List<searchByName>> call = theSportDB.getsearchByName("3"); //TO DO: GANTI param
 
         call.enqueue(new Callback<List<searchByName>>() {
             @Override
@@ -94,9 +94,9 @@ public class MainActivity extends AppCompatActivity {
 
                          @Override
                          public void onFailure(Call<List<searchById>> call, Throwable t) {
-
                          }
-                     }
+                     });
+
 
                 //TO DO : String Concat, Assign yang mana yang perlu diubah
     }
@@ -114,7 +114,8 @@ public class MainActivity extends AppCompatActivity {
                          public void onFailure(Call<List<nextEvent>> call, Throwable t) {
 
                          }
-                     }
+        });
+
 
                 //TO DO : String Concat, Assign yang mana yang perlu diubah
     }
