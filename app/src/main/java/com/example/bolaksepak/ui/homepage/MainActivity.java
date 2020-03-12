@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ProgressBar;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -34,7 +35,6 @@ public class MainActivity extends AppCompatActivity {
     private static final String mGetTeamByNameUrl = "https://www.thesportsdb.com/api/v1/json/1/searchteams.php?t=";
     private static final String mGetLast5MatchByTeamId = "https://www.thesportsdb.com/api/v1/json/1/eventslast.php?id=";
     private static final String mGetNext5MatchByTeamId = "https://www.thesportsdb.com/api/v1/json/1/eventsnext.php?id=";
-    private MatchAdapter mMatchAdapter;
     private Context mContext;
     private Activity mActivity;
     private RecyclerView mMatchListView;
@@ -42,7 +42,8 @@ public class MainActivity extends AppCompatActivity {
     private int[] mClubImages;
     private String teamSearch = "Arsenal";
     private int numOfMatches = 0;
-
+    private MatchAdapter mMatchAdapter = new MatchAdapter(this, mMatchList, mClubImages);
+    private ProgressBar pb;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,21 +55,24 @@ public class MainActivity extends AppCompatActivity {
         mContext = getApplicationContext();
         mActivity = MainActivity.this;
 
+        //Show loader
+//        findViewById(R.id.homepage_progressbar).setVisibility(View.VISIBLE);
         //Set Layout
         mMatchListView = (RecyclerView) findViewById(R.id.homepage_matchlist);
-
         //Fetch data from TheSportDB
         getMatchList();
         //Show result
         generateRecyclerViewMatchList();
+        //Hide Loader
+//        findViewById(R.id.homepage_progressbar).setVisibility(View.GONE);
 
 
     }
 
     public void generateRecyclerViewMatchList() {
-        this.mMatchAdapter = new MatchAdapter(this, mMatchList, mClubImages);
         mMatchListView.setAdapter(mMatchAdapter);
         mMatchListView.setLayoutManager(new LinearLayoutManager(this));
+
     }
 
     public void viewMatchDetail(View view) {
@@ -139,7 +143,7 @@ public class MainActivity extends AppCompatActivity {
                                     if (matchJSONArray.length() > 0) {
                                         Log.i("numOfMatches", String.valueOf(numOfMatches));
                                         Log.i("length of mMatchList array", String.valueOf(mMatchList.size()));
-                                        for (int i = 0; i <  matchJSONArray.length(); i++) {
+                                        for (int i = 0; i < matchJSONArray.length(); i++) {
                                             mMatchList.add(new Match());
                                             JSONObject match = matchJSONArray.getJSONObject(i);
                                             //Assign data to match object
@@ -174,6 +178,7 @@ public class MainActivity extends AppCompatActivity {
 
                                         }
                                         numOfMatches += matchJSONArray.length();
+                                        mMatchAdapter.notifyDataSetChanged();
 
                                     }
                                 }
