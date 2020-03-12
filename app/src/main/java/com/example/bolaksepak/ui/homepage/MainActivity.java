@@ -29,6 +29,7 @@ import org.json.JSONObject;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 
 public class MainActivity extends AppCompatActivity implements MatchAdapter.OnMatchListener {
@@ -40,7 +41,7 @@ public class MainActivity extends AppCompatActivity implements MatchAdapter.OnMa
     private RecyclerView mMatchListView;
     private ArrayList<Match> mMatchList = new ArrayList<>();
     private int[] mClubImages;
-    private String teamSearch = "Arsenal";
+    private String teamSearch = "Liverpool";
     private int numOfMatches = 0;
     private MatchAdapter mMatchAdapter = new MatchAdapter(this, mMatchList, mClubImages, this);
     private ProgressBar pb;
@@ -149,15 +150,18 @@ public class MainActivity extends AppCompatActivity implements MatchAdapter.OnMa
                                             mMatchList.add(new Match());
                                             JSONObject match = matchJSONArray.getJSONObject(i);
                                             //Assign data to match object
+                                            //TODO: Semua ini dan validasinya pindahin ke kelasnya aja biar lebih clean
                                             mMatchList.get(i + numOfMatches).home_name = match.getString("strHomeTeam");
                                             mMatchList.get(i + numOfMatches).home_id = match.getString("idHomeTeam");
                                             mMatchList.get(i + numOfMatches).away_id = match.getString("idAwayTeam");
                                             mMatchList.get(i + numOfMatches).away_name = match.getString("strAwayTeam");
+                                            //Assign Match Date
                                             if (match.isNull("strDate")) {
                                                 mMatchList.get(i + numOfMatches).date = "No Date Info";
                                             } else {
                                                 mMatchList.get(i + numOfMatches).date = match.getString("strDate");
                                             }
+                                            //Assign Match Score
                                             if (match.isNull("intHomeScore")) {
                                                 mMatchList.get(i + numOfMatches).home_score = -1;
                                             } else {
@@ -169,6 +173,31 @@ public class MainActivity extends AppCompatActivity implements MatchAdapter.OnMa
                                                 mMatchList.get(i + numOfMatches).away_score = match.getInt("intAwayScore");
                                             }
 
+                                            //Assign Match Shots
+                                            if (match.isNull("intHomeShots")) {
+                                                mMatchList.get(i + numOfMatches).home_shots = -1;
+                                            } else {
+                                                mMatchList.get(i + numOfMatches).home_shots = match.getInt("intHomeShots");
+                                            }
+                                            if (match.isNull("intAwayShots")) {
+                                                mMatchList.get(i + numOfMatches).away_shots = -1;
+                                            } else {
+                                                mMatchList.get(i + numOfMatches).away_shots = match.getInt("intAwayShots");
+                                            }
+
+                                            //Assign Goal Details
+                                            if (!match.isNull("strHomeGoalDetails")) {
+                                                String[] goalDetails = match.getString("strHomeGoalDetails").split(";");
+                                                mMatchList.get(i + numOfMatches).homeGoalDetails = goalDetails;
+                                                Log.d("HomeGoalDetails", "onResponse: " + Arrays.toString(goalDetails));
+                                            }
+                                            if (!match.isNull("strAwayGoalDetails")) {
+                                                String[] goalDetails = match.getString("strAwayGoalDetails").split(";");
+                                                mMatchList.get(i + numOfMatches).awayGoalDetails = goalDetails;
+                                                Log.d("AwayGoalDetails", "onResponse: " + Arrays.toString(goalDetails));
+                                            }
+
+                                            //Assign Team Badge
                                             setTeamBadge(mGetTeamByNameUrl + URLEncoder.encode((mMatchList.get(i + numOfMatches).home_name), "UTF-8"), i + numOfMatches, 1);
                                             setTeamBadge(mGetTeamByNameUrl + URLEncoder.encode((mMatchList.get(i + numOfMatches).away_name), "UTF-8"), i + numOfMatches, 2);
                                             Log.d("Match index: ", String.valueOf(i + numOfMatches + 1));
