@@ -21,20 +21,26 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.util.ArrayList;
 
 
 public class MainActivity extends AppCompatActivity {
     private static final String mGetTeamByNameUrl = "https://www.thesportsdb.com/api/v1/json/1/searchteams.php?t=";
+    private static final String mGetLast5MatchByTeamId = "https://www.thesportsdb.com/api/v1/json/1/eventslast.php?id=";
+    private static final String mGetNext5MatchByTeamId = "https://www.thesportsdb.com/api/v1/json/1/eventsnext.php?id=";
     private MatchAdapter mMatchAdapter;
     private Context mContext;
     private Activity mActivity;
     private RecyclerView mMatchListView;
-    private Match[] mMatchList = new Match[10];
-    private int[] mClubImages = {
-            R.drawable.club1,
-            R.drawable.club2
-    };
+    private ArrayList<Match> mMatchList = new ArrayList<>();
+    private int[] mClubImages;
+    private String teamSearch = "Arsenal";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,15 +57,19 @@ public class MainActivity extends AppCompatActivity {
 
         //Fetch data from TheSportDB
         getMatchList();
+        Log.d("value", mMatchList.toString());
+        generateRecyclerViewMatchList();
+//        this.mMatchAdapter = new MatchAdapter(this, mMatchList, mClubImages);
+//        mMatchListView.setAdapter(mMatchAdapter);
+//        mMatchListView.setLayoutManager(new LinearLayoutManager(this));
 
-        for (int i = 0; i < mMatchList.length; i++) {
-            mMatchList[i] = new Match("99 Maret 2020", "Club 1", 1, "Club 2", 2);
-        }
+
+    }
+
+    public void generateRecyclerViewMatchList() {
         this.mMatchAdapter = new MatchAdapter(this, mMatchList, mClubImages);
         mMatchListView.setAdapter(mMatchAdapter);
         mMatchListView.setLayoutManager(new LinearLayoutManager(this));
-
-
     }
 
     public void viewMatchDetail(View view) {
@@ -68,14 +78,163 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void getMatchList() {
-        String getUrl = mGetTeamByNameUrl.concat("Arsenal");
+        String getTeamIdByNameUrl = mGetTeamByNameUrl.concat(teamSearch);
+
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
-                (Request.Method.GET, getUrl, null, response -> Log.d("Isi data", response.toString()), error -> {
-                    // TODO: Handle error
-                    Log.d("Error fetch", "lah cacad");
+                (Request.Method.GET, getTeamIdByNameUrl, null, new Response.Listener<JSONObject>() {
+
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        if (response != null) {
+                            try {
+                                JSONArray teamsJSONArray = response.getJSONArray("teams");
+                                for (int i = 0; i < teamsJSONArray.length(); i++) {
+                                    String getLast5MatchByIdUrl = mGetLast5MatchByTeamId;
+                                    String getNext5MatchByIdUrl = mGetNext5MatchByTeamId;
+                                    JSONObject team = teamsJSONArray.getJSONObject(i);
+                                    String teamId = team.getString("idTeam");
+                                    //For each team, get 5 next and last match
+                                    getLast5MatchByIdUrl = getLast5MatchByIdUrl.concat(teamId);
+                                    getNext5MatchByIdUrl = getNext5MatchByIdUrl.concat(teamId);
+
+                                    //Get all team matches
+                                    getMatches(getLast5MatchByIdUrl, i, 1);
+                                    getMatches(getNext5MatchByIdUrl, i, 2);
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+
+                        }
+                    }
+
+
+                }, new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                    }
                 });
 
         MatchFetcherSingleton.getInstance(mContext).addToRequestQueue(jsonObjectRequest);
     }
+
+    private void getMatches(String url, int idx, int type) { //type = 1 -> prev, type = 2 => next
+        String apiKey;
+        if (type == 1) {
+            apiKey = "results";
+        } else {
+            apiKey = "events";
+        }
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
+                (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        if (response != null) {
+                            try {
+                                if (!response.isNull(apiKey)) {
+                                    JSONArray matchJSONArray = response.getJSONArray(apiKey);
+                                    if (matchJSONArray.length() > 0) {
+                                        for (int i = 0; i < matchJSONArray.length(); i++) {
+                                            JSONObject match = matchJSONArray.getJSONObject(i);
+                                            //Assign data to match object
+                                            mMatchList.add(new Match());
+                                            mMatchList.get(idx).home_name = match.getString("strHomeTeam");
+                                            mMatchList.get(idx).home_id = match.getString("idHomeTeam");
+                                            mMatchList.get(idx).away_id = match.getString("idAwayTeam");
+                                            mMatchList.get(idx).away_name = match.getString("strAwayTeam");
+                                            if (match.isNull("strDate")) {
+                                                mMatchList.get(idx).date = "TBA";
+                                            } else {
+                                                mMatchList.get(idx).date = match.getString("strDate");
+                                            }
+                                            if (match.isNull("intHomeScore")) {
+                                                mMatchList.get(idx).home_score = 0;
+                                            } else {
+                                                mMatchList.get(idx).home_score = match.getInt("intHomeScore");
+                                            }
+                                            if (match.isNull("intAwayScore")) {
+                                                mMatchList.get(idx).away_score = 0;
+                                            } else {
+                                                mMatchList.get(idx).away_score = match.getInt("intAwayScore");
+                                            }
+//                                            Log.d("home team: ", mMatchList.get(idx).home_name);
+//                                            Log.d("away_team: ", mMatchList.get(idx).away_name);
+//                                            Log.d("date: ", mMatchList.get(idx).date);
+//                                            //TODO: handle null
+
+                                            setTeamBadge(mGetTeamByNameUrl + URLEncoder.encode((mMatchList.get(idx).home_name), "UTF-8"), idx, type, 1);
+                                            setTeamBadge(mGetTeamByNameUrl + URLEncoder.encode((mMatchList.get(idx).away_name), "UTF-8"), idx, type, 2);
+
+                                        }
+                                    }
+                                }
+                            } catch (JSONException | UnsupportedEncodingException e) {
+                                e.printStackTrace();
+                            }
+                        }
+
+                    }
+                }, new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.d("ERROR FETCH URL: ", url);
+                    }
+                });
+
+        MatchFetcherSingleton.getInstance(mContext).addToRequestQueue(jsonObjectRequest);
+    }
+
+    private void setTeamBadge(String url, int idx, int eventType, int teamType) {
+        Log.d("iscalled", url);
+        String apiKey;
+        if (eventType == 1) {
+            apiKey = "results";
+        } else {
+            apiKey = "events";
+        }
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
+                (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        if (response != null) {
+                            try {
+                                Log.d("resp", response.toString());
+                                JSONArray matchJSONArray = response.getJSONArray("teams");
+                                JSONObject team = matchJSONArray.getJSONObject(0);
+                                if (teamType == 1) {
+                                    mMatchList.get(idx).home_logo_url = team.getString("strTeamBadge").concat("/preview");
+
+                                } else {
+                                    mMatchList.get(idx).away_logo_url = team.getString("strTeamBadge").concat("/preview");
+                                }
+                                Log.d("home team: ", mMatchList.get(idx).home_name);
+                                Log.d("away_team: ", mMatchList.get(idx).away_name);
+                                Log.d("date: ", mMatchList.get(idx).date);
+                                Log.d("home logo url", mMatchList.get(idx).home_logo_url);
+                                Log.d("away logo url", mMatchList.get(idx).away_logo_url);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+
+                    }
+                }, new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.d("ERROR FETCH URL: ", url);
+                    }
+                });
+
+        MatchFetcherSingleton.getInstance(mContext).addToRequestQueue(jsonObjectRequest);
+
+    }
 }
+
+

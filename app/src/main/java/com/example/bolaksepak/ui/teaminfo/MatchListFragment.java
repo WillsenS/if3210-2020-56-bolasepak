@@ -14,6 +14,8 @@ import com.example.bolaksepak.Match;
 import com.example.bolaksepak.MatchAdapter;
 import com.example.bolaksepak.R;
 
+import java.util.ArrayList;
+
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link MatchListFragment#newInstance} factory method to
@@ -22,7 +24,7 @@ import com.example.bolaksepak.R;
 public class MatchListFragment extends Fragment {
 
     RecyclerView MatchListView;
-    Match[] MatchList = new Match[10];
+    ArrayList<Match> MatchList = new ArrayList<>();
     int[] clubImages = new int[2];
     MatchAdapter md;
 
@@ -43,8 +45,8 @@ public class MatchListFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        for (int i = 0; i < MatchList.length; i++) {
-            MatchList[i] = new Match("99 Maret 2020", "Club 1", 1, "Club 2", 2);
+        for (int i = 0; i < MatchList.size(); i++) {
+            MatchList.set(i, new Match("99 Maret 2020", "Club 1", 1, "Club 2", 2));
         }
 
     }
