@@ -64,7 +64,7 @@ public class weather {
     }
 
 }
-public class Sys {
+class Sys {
     private float type;
     private float id;
     private float message;
@@ -100,7 +100,7 @@ public class Sys {
     }
 
 }
-public class Clouds {
+class Clouds {
     private float all;
 
 
@@ -111,7 +111,7 @@ public class Clouds {
     }
 
 }
-public class Wind {
+class Wind {
     private float speed;
     private float deg;
 
@@ -126,7 +126,7 @@ public class Wind {
         return deg;
     }
 }
-public class Main {
+class Main {
     private float temp;
     private float pressure;
     private float humidity;
@@ -157,7 +157,7 @@ public class Main {
     }
 
 }
-public class Coord {
+class Coord {
     private float lon;
     private float lat;
 
