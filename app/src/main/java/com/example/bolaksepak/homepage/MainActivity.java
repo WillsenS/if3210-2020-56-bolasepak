@@ -1,7 +1,9 @@
 package com.example.bolaksepak.homepage;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -33,11 +35,10 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class MainActivity extends AppCompatActivity implements SensorEventListener {
+public class MainActivity extends AppCompatActivity {
     private theSportDB theSportDB;
     TextView tv_steps;
-    SensorManager sensorManager;
-    boolean running = false;
+    StepServiceReceiver receiver;
 
     RecyclerView MatchListView;
     Match[] MatchList = new Match[10];
@@ -69,11 +70,43 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
         theSportDB = retrofit.create(com.example.bolaksepak.theSportDB.class);
         tv_steps = (TextView) findViewById(R.id.tv_steps);
-        sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        //start service
+        Intent intent = new Intent(MainActivity.this,
+                com.example.bolaksepak.StepCountService.class);
+        startService(intent);
+
         //getlastevent();
         //getnextevent();
         //getsearchbyid();
         //getsearchbyname();
+    }
+
+    @Override
+    protected void onStart() {
+        //Register BroadcastReceiver
+        //to receive event from our service
+        receiver = new StepServiceReceiver();
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction("UpdateSensorValues");
+        registerReceiver(receiver, intentFilter);
+
+        super.onStart();
+    }
+
+    @Override
+    protected void onStop() {
+        unregisterReceiver(receiver);
+        super.onStop();
+    }
+
+    private class StepServiceReceiver extends BroadcastReceiver {
+        int sensorValues;
+        @Override
+        public void onReceive(Context arg0, Intent arg1) {
+            sensorValues = arg1.getIntExtra("Values", 0);
+            String tv_step = sensorValues + " steps today...";
+            tv_steps.setText(tv_step);
+        }
     }
 
     private void getsearchbyname() {
@@ -162,35 +195,5 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         startActivity(intent);
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        running = true;
-        Sensor countSensor = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
-        if(countSensor != null){
-            sensorManager.registerListener(this, countSensor, sensorManager.SENSOR_DELAY_FASTEST);
-        }else{
-            Toast.makeText(this, "Sensor not found", Toast.LENGTH_SHORT).show();
-        }
-    }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-        running = false;
-    }
-
-    @Override
-    public void onSensorChanged(SensorEvent sensorEvent) {
-        if(running) {
-            int sensorValues = (int) sensorEvent.values[0];
-            String tv_content = sensorValues + " steps today...";
-            tv_steps.setText(tv_content);
-        }
-    }
-
-    @Override
-    public void onAccuracyChanged(Sensor sensor, int i) {
-        //do nothing
-    }
 }
