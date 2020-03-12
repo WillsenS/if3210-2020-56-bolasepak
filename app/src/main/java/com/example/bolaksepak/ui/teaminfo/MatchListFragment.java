@@ -11,7 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.bolaksepak.Match;
-import com.example.bolaksepak.MatchAdapter;
+import com.example.bolaksepak.adapter.MatchAdapter;
 import com.example.bolaksepak.R;
 
 import java.util.ArrayList;
@@ -61,7 +61,7 @@ public class MatchListFragment extends Fragment {
         int image2 = args.getInt("ClubImage2");
         clubImages[0] = image1;
         clubImages[1] = image2;
-        this.md = new MatchAdapter(getContext(), MatchList, clubImages);
+        this.md = new MatchAdapter(getContext(), MatchList, clubImages, null);
         MatchListView.setAdapter(this.md);
         MatchListView.setLayoutManager(new LinearLayoutManager(getContext()));
         return rootView;

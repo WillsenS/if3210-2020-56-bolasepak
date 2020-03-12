@@ -42,6 +42,20 @@ public class Match implements Serializable {
         away_name = an;
     }
 
+    public Match(Match m) {
+        date = m.date;
+        home_name = m.home_name;
+        away_name = m.away_name;
+        home_score = m.home_score;
+        away_score = m.away_score;
+        home_shots = m.home_shots;
+        away_shots = m.away_shots;
+        home_logo_url = m.home_logo_url;
+        away_logo_url = m.away_logo_url;
+        home_id = m.home_id;
+        away_id = m.away_id;
+    }
+
     @NonNull
     @Override
     public String toString() {

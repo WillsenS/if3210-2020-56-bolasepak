@@ -13,7 +13,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.bolaksepak.Match;
-import com.example.bolaksepak.MatchAdapter;
+import com.example.bolaksepak.adapter.MatchAdapter;
 import com.example.bolaksepak.R;
 import com.example.bolaksepak.api.matchschedule.MatchFetcherSingleton;
 import com.example.bolaksepak.ui.eventdetail.EventDetailActivity;
@@ -31,7 +31,7 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements MatchAdapter.OnMatchListener {
     private static final String mGetTeamByNameUrl = "https://www.thesportsdb.com/api/v1/json/1/searchteams.php?t=";
     private static final String mGetLast5MatchByTeamId = "https://www.thesportsdb.com/api/v1/json/1/eventslast.php?id=";
     private static final String mGetNext5MatchByTeamId = "https://www.thesportsdb.com/api/v1/json/1/eventsnext.php?id=";
@@ -42,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
     private int[] mClubImages;
     private String teamSearch = "Arsenal";
     private int numOfMatches = 0;
-    private MatchAdapter mMatchAdapter = new MatchAdapter(this, mMatchList, mClubImages);
+    private MatchAdapter mMatchAdapter = new MatchAdapter(this, mMatchList, mClubImages, this);
     private ProgressBar pb;
 
     @Override
@@ -76,10 +76,10 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public void viewMatchDetail(View view) {
-        Intent intent = new Intent(this, EventDetailActivity.class);
-        startActivity(intent);
-    }
+//    public void viewMatchDetail(View view) {
+//        Intent intent = new Intent(this, EventDetailActivity.class);
+//        startActivity(intent);
+//    }
 
     private void getMatchList() {
         String getTeamIdByNameUrl = mGetTeamByNameUrl.concat(teamSearch);
@@ -233,6 +233,15 @@ public class MainActivity extends AppCompatActivity {
         mMatchAdapter.notifyDataSetChanged();
         MatchFetcherSingleton.getInstance(mContext).addToRequestQueue(jsonObjectRequest);
 
+    }
+
+    @Override
+    public void OnMatchClick(int position) {
+        String TAG = "tesklik";
+        Log.d(TAG, "OnMatchClick: " + position);
+        Intent intent = new Intent(this, EventDetailActivity.class);
+        intent.putExtra("MATCH", mMatchList.get(position));
+        startActivity(intent);
     }
 }
 
