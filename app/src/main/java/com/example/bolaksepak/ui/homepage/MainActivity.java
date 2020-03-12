@@ -1,153 +1,81 @@
 package com.example.bolaksepak.ui.homepage;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.bolaksepak.Match;
 import com.example.bolaksepak.MatchAdapter;
 import com.example.bolaksepak.R;
+import com.example.bolaksepak.api.matchschedule.MatchFetcherSingleton;
 import com.example.bolaksepak.ui.eventdetail.EventDetailActivity;
-import com.example.bolaksepak.api.matchschedule.lastEvent;
-import com.example.bolaksepak.api.matchschedule.nextEvent;
-import com.example.bolaksepak.api.matchschedule.searchById;
-import com.example.bolaksepak.api.matchschedule.searchByName;
-import com.example.bolaksepak.api.matchschedule.theSportDB;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.List;
+import org.json.JSONObject;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity {
-    private theSportDB theSportDB;
-
-    RecyclerView MatchListView;
-    Match[] MatchList = new Match[10];
-    int[] clubImages = {
+    private static final String mGetTeamByNameUrl = "https://www.thesportsdb.com/api/v1/json/1/searchteams.php?t=";
+    private MatchAdapter mMatchAdapter;
+    private Context mContext;
+    private Activity mActivity;
+    private RecyclerView mMatchListView;
+    private Match[] mMatchList = new Match[10];
+    private int[] mClubImages = {
             R.drawable.club1,
             R.drawable.club2
     };
-    MatchAdapter md;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.homepage);
-        MatchListView = (RecyclerView) findViewById(R.id.matchlist);
-        for (int i = 0; i < MatchList.length; i++) {
-            MatchList[i] = new Match("99 Maret 2020", "Club 1", 1, "Club 2", 2);
+
+        // Get the application context
+        mContext = getApplicationContext();
+        mActivity = MainActivity.this;
+
+        //Set Layout
+        mMatchListView = (RecyclerView) findViewById(R.id.homepage_matchlist);
+
+        //Fetch data from TheSportDB
+        getMatchList();
+
+        for (int i = 0; i < mMatchList.length; i++) {
+            mMatchList[i] = new Match("99 Maret 2020", "Club 1", 1, "Club 2", 2);
         }
-
-        this.md = new MatchAdapter(this, MatchList, clubImages);
-        MatchListView.setAdapter(md);
-        MatchListView.setLayoutManager(new LinearLayoutManager(this));
-
-
-        //This part is for API
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://www.thesportsdb.com/api/v1/json/1/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-        theSportDB = retrofit.create(com.example.bolaksepak.api.matchschedule.theSportDB.class);
-
-        //getlastevent();
-        //getnextevent();
-        //getsearchbyid();
-        //getsearchbyname();
-    }
-
-    private void getsearchbyname() {
-        Call<List<searchByName>> call = theSportDB.getsearchByName("3"); //TO DO: GANTI param
-
-        call.enqueue(new Callback<List<searchByName>>() {
-            @Override
-            public void onResponse(Call<List<searchByName>> call, Response<List<searchByName>> response) {
-
-            }
-
-            @Override
-            public void onFailure(Call<List<searchByName>> call, Throwable t) {
-
-            }
-        });
-
-        //TO DO : String Concat, Assign yang mana yang perlu diubah
-    }
-
-    private void getsearchbyid() {
-        Call<List<searchById>> call = theSportDB.getsearchById(3); //TO DO: GANTI param
-
-        call.enqueue(new Callback<List<searchById>>() {
-                         @Override
-                         public void onResponse(Call<List<searchById>> call, Response<List<searchById>> response) {
-
-                         }
-
-                         @Override
-                         public void onFailure(Call<List<searchById>> call, Throwable t) {
-                         }
-                     });
+        this.mMatchAdapter = new MatchAdapter(this, mMatchList, mClubImages);
+        mMatchListView.setAdapter(mMatchAdapter);
+        mMatchListView.setLayoutManager(new LinearLayoutManager(this));
 
 
-                //TO DO : String Concat, Assign yang mana yang perlu diubah
-    }
-
-    private void getnextevent() {
-        Call<List<nextEvent>> call = theSportDB.getNextEvent(3); //TO DO: GANTI param
-
-        call.enqueue(new Callback<List<nextEvent>>() {
-                         @Override
-                         public void onResponse(Call<List<nextEvent>> call, Response<List<nextEvent>> response) {
-
-                         }
-
-                         @Override
-                         public void onFailure(Call<List<nextEvent>> call, Throwable t) {
-
-                         }
-        });
-
-
-                //TO DO : String Concat, Assign yang mana yang perlu diubah
-    }
-
-    private void getlastevent() {
-        Call<List<lastEvent>> call = theSportDB.getLastEvent(3); //TO DO: GANTI param
-
-        call.enqueue(new Callback<List<lastEvent>>() {
-            @Override
-            public void onResponse(Call<List<lastEvent>> call, Response<List<lastEvent>> response) {
-                if (!response.isSuccessful()) {
-                    //setText("CODE: " + response.code());
-                    //return;
-                }
-
-                //List<lastEvent> lastevent = response.body();
-            }
-
-            @Override
-            public void onFailure(Call<List<lastEvent>> call, Throwable t) {
-                //setText("t.getMessage());
-            }
-        });
-
-        //TO DO : String Concat, Assign yang mana yang perlu diubah
     }
 
     public void viewMatchDetail(View view) {
         Intent intent = new Intent(this, EventDetailActivity.class);
-//        EditText editText = (EditText) findViewById(R.id.editText);
-//        String message = editText.getText().toString();
-//        intent.putExtra(EXTRA_MESSAGE, message);
         startActivity(intent);
+    }
+
+    private void getMatchList() {
+        String getUrl = mGetTeamByNameUrl.concat("Arsenal");
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
+                (Request.Method.GET, getUrl, null, response -> Log.d("Isi data", response.toString()), error -> {
+                    // TODO: Handle error
+                    Log.d("Error fetch", "lah cacad");
+                });
+
+        MatchFetcherSingleton.getInstance(mContext).addToRequestQueue(jsonObjectRequest);
     }
 }
