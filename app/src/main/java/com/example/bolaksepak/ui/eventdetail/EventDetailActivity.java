@@ -1,4 +1,4 @@
-package com.example.bolaksepak.eventdetail;
+package com.example.bolaksepak.ui.eventdetail;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -7,7 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.example.bolaksepak.R;
-import com.example.bolaksepak.teaminfo.TeamInfoActivity;
+import com.example.bolaksepak.ui.teaminfo.TeamInfoActivity;
 
 public class EventDetailActivity extends AppCompatActivity {
 

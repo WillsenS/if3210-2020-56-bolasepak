@@ -9,14 +9,14 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".teaminfo.TeamInfoActivity">
+        <activity android:name=".ui.teaminfo.TeamInfoActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".eventdetail.EventDetailActivity" />
+                android:value=".ui.eventdetail.EventDetailActivity" />
         </activity>
-        <activity android:name=".eventdetail.EventDetailActivity" />
+        <activity android:name=".ui.eventdetail.EventDetailActivity" />
         <activity
-            android:name=".homepage.MainActivity"
+            android:name=".ui.homepage.MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>

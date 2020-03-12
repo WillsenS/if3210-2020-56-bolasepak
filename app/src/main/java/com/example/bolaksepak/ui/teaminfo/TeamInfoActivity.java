@@ -1,4 +1,4 @@
-package com.example.bolaksepak.teaminfo;
+package com.example.bolaksepak.ui.teaminfo;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NavUtils;
@@ -11,7 +11,7 @@ import android.util.Log;
 import android.view.View;
 
 import com.example.bolaksepak.R;
-import com.example.bolaksepak.eventdetail.EventDetailActivity;
+import com.example.bolaksepak.ui.eventdetail.EventDetailActivity;
 import com.google.android.material.tabs.TabLayout;
 
 public class TeamInfoActivity extends AppCompatActivity {

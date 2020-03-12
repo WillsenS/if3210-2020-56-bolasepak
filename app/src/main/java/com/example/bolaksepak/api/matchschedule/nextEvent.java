@@ -1,4 +1,4 @@
-package com.example.bolaksepak;
+package com.example.bolaksepak.api.matchschedule;
 
 public class nextEvent {
 //            JSON

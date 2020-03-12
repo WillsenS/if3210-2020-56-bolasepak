@@ -1,6 +1,6 @@
-package com.example.bolaksepak;
+package com.example.bolaksepak.api.matchschedule;
 
-public class searchById {
+public class searchByName {
 
     private int idTeam;
     private int idSoccerXML;

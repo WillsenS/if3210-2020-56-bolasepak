@@ -1,4 +1,4 @@
-package com.example.bolaksepak.homepage;
+package com.example.bolaksepak.ui.homepage;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -7,12 +7,12 @@ import android.view.View;
 import com.example.bolaksepak.Match;
 import com.example.bolaksepak.MatchAdapter;
 import com.example.bolaksepak.R;
-import com.example.bolaksepak.eventdetail.EventDetailActivity;
-import com.example.bolaksepak.lastEvent;
-import com.example.bolaksepak.nextEvent;
-import com.example.bolaksepak.searchById;
-import com.example.bolaksepak.searchByName;
-import com.example.bolaksepak.theSportDB;
+import com.example.bolaksepak.ui.eventdetail.EventDetailActivity;
+import com.example.bolaksepak.api.matchschedule.lastEvent;
+import com.example.bolaksepak.api.matchschedule.nextEvent;
+import com.example.bolaksepak.api.matchschedule.searchById;
+import com.example.bolaksepak.api.matchschedule.searchByName;
+import com.example.bolaksepak.api.matchschedule.theSportDB;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
-        theSportDB = retrofit.create(com.example.bolaksepak.theSportDB.class);
+        theSportDB = retrofit.create(com.example.bolaksepak.api.matchschedule.theSportDB.class);
 
         //getlastevent();
         //getnextevent();
