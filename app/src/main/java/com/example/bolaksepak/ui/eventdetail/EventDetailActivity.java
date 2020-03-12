@@ -26,9 +26,8 @@ public class EventDetailActivity extends AppCompatActivity {
     private TextView mAwayScore;
     private TextView mHomeName;
     private TextView mAwayName;
-    private TextView mHomeShots; //TODO: Ambil datanya dulu dari mainactivity homepage
+    private TextView mHomeShots;
     private TextView mAwayShots;
-    //TODO: Detail yang nembak siapa aja ambil dari MainActivity homepage
 
 
     @Override

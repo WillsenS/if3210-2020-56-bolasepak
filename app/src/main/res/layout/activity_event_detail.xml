@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/match_wrapper"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:paddingHorizontal="0dp"
     android:paddingVertical="0dp">
 
@@ -20,11 +20,11 @@
 
     <ImageView
         android:id="@+id/away_club_logo"
-        android:onClick="viewAwayTeam"
         android:layout_width="75dp"
         android:layout_height="75dp"
         android:layout_marginEnd="24dp"
         android:contentDescription="TODO"
+        android:onClick="viewAwayTeam"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/match_date"
         app:srcCompat="@drawable/club2" />
@@ -64,11 +64,11 @@
 
     <ImageView
         android:id="@+id/home_club_logo"
-        android:onClick="viewHomeTeam"
         android:layout_width="75dp"
         android:layout_height="75dp"
         android:layout_marginStart="24dp"
         android:contentDescription="TODO"
+        android:onClick="viewHomeTeam"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/match_date"
         app:srcCompat="@drawable/club1" />
@@ -96,11 +96,14 @@
         android:id="@+id/title_shots"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
         android:text="SHOTS"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.502"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/vs" />
+        app:layout_constraintTop_toBottomOf="@+id/vs"
+        app:layout_constraintVertical_bias="0.048" />
 
     <TextView
         android:id="@+id/title_goals"
@@ -112,86 +115,44 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/title_shots" />
 
-    <LinearLayout
-        android:id="@+id/away_detail"
-        android:layout_width="100dp"
+    <TextView
+        android:id="@+id/home_shots"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginEnd="16dp"
+        android:gravity="center_horizontal"
+        android:text="3"
+        app:layout_constraintBottom_toBottomOf="@+id/title_shots"
+        app:layout_constraintEnd_toStartOf="@+id/title_shots"
+        app:layout_constraintTop_toTopOf="@+id/away_shots" />
+
+    <TextView
+        android:id="@+id/away_shots"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:orientation="vertical"
-        app:layout_constraintEnd_toEndOf="@+id/away_club_logo"
-        app:layout_constraintStart_toStartOf="@+id/away_club_logo"
-        app:layout_constraintTop_toBottomOf="@+id/away_club_name">
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="1dp"
+        android:gravity="center_horizontal"
+        android:text="3"
+        app:layout_constraintStart_toEndOf="@+id/title_shots"
+        app:layout_constraintTop_toTopOf="@+id/title_shots" />
 
-        <TextView
-            android:id="@+id/away_shots"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:gravity="center_horizontal"
-            android:text="3" />
-
-        <TextView
-            android:id="@+id/as1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:text="TextView" />
-
-        <TextView
-            android:id="@+id/as"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:text="TextView" />
-
-        <TextView
-            android:id="@+id/as2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:text="TextView" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/linearLayout4"
-        android:layout_width="100dp"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView3"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:orientation="vertical"
-        app:layout_constraintEnd_toEndOf="@+id/home_club_logo"
-        app:layout_constraintStart_toStartOf="@+id/home_club_logo"
-        app:layout_constraintTop_toBottomOf="@+id/home_club_name">
+        android:layout_marginTop="9dp"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintEnd_toStartOf="@+id/title_goals"
+        app:layout_constraintTop_toBottomOf="@+id/title_goals" />
 
-        <TextView
-            android:id="@+id/home_shots"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:gravity="center_horizontal"
-            android:text="3"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/hs"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:text="TextView" />
-
-        <TextView
-            android:id="@+id/hs3"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:text="TextView" />
-
-        <TextView
-            android:id="@+id/hs4"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:text="TextView" />
-    </LinearLayout>
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="9dp"
+        app:layout_constraintStart_toEndOf="@+id/title_goals"
+        app:layout_constraintTop_toBottomOf="@+id/title_goals" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
