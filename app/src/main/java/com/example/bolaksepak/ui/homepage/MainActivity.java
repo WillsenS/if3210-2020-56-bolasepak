@@ -172,9 +172,6 @@ public class MainActivity extends AppCompatActivity implements MatchAdapter.OnMa
                                             setTeamBadge(mGetTeamByNameUrl + URLEncoder.encode((mMatchList.get(i + numOfMatches).home_name), "UTF-8"), i + numOfMatches, 1);
                                             setTeamBadge(mGetTeamByNameUrl + URLEncoder.encode((mMatchList.get(i + numOfMatches).away_name), "UTF-8"), i + numOfMatches, 2);
                                             Log.d("Match index: ", String.valueOf(i + numOfMatches + 1));
-                                            Log.d("home team: ", mMatchList.get(i + numOfMatches).home_name);
-                                            Log.d("away_team: ", mMatchList.get(i + numOfMatches).away_name);
-                                            Log.d("date: ", mMatchList.get(i + numOfMatches).date);
 
                                         }
                                         numOfMatches += matchJSONArray.length();
@@ -198,7 +195,6 @@ public class MainActivity extends AppCompatActivity implements MatchAdapter.OnMa
     }
 
     private void setTeamBadge(String url, int idx, int teamType) {
-        Log.d("index gambar", String.valueOf(idx));
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
                 (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
 
@@ -210,11 +206,9 @@ public class MainActivity extends AppCompatActivity implements MatchAdapter.OnMa
                                 JSONObject team = matchJSONArray.getJSONObject(0);
                                 if (teamType == 1) {
                                     mMatchList.get(idx).home_logo_url = team.getString("strTeamBadge").concat("/preview");
-                                    Log.d("home_logo_url", mMatchList.get(idx).home_logo_url);
 
                                 } else {
                                     mMatchList.get(idx).away_logo_url = team.getString("strTeamBadge").concat("/preview");
-                                    Log.d("away_logo_url", mMatchList.get(idx).away_logo_url);
                                 }
 
                             } catch (JSONException e) {
@@ -237,8 +231,7 @@ public class MainActivity extends AppCompatActivity implements MatchAdapter.OnMa
 
     @Override
     public void OnMatchClick(int position) {
-        String TAG = "tesklik";
-        Log.d(TAG, "OnMatchClick: " + position);
+        Log.d("Click Position", "OnMatchClick: " + position);
         Intent intent = new Intent(this, EventDetailActivity.class);
         intent.putExtra("MATCH", mMatchList.get(position));
         startActivity(intent);
