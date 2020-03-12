@@ -1,8 +1,15 @@
 package com.example.bolaksepak.homepage;
 
+import android.content.Context;
 import android.content.Intent;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.bolaksepak.Match;
 import com.example.bolaksepak.MatchAdapter;
@@ -26,8 +33,11 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements SensorEventListener {
     private theSportDB theSportDB;
+    TextView tv_steps;
+    SensorManager sensorManager;
+    boolean running = false;
 
     RecyclerView MatchListView;
     Match[] MatchList = new Match[10];
@@ -58,7 +68,8 @@ public class MainActivity extends AppCompatActivity {
                 .build();
 
         theSportDB = retrofit.create(com.example.bolaksepak.theSportDB.class);
-
+        tv_steps = (TextView) findViewById(R.id.tv_steps);
+        sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         //getlastevent();
         //getnextevent();
         //getsearchbyid();
@@ -149,5 +160,37 @@ public class MainActivity extends AppCompatActivity {
 //        String message = editText.getText().toString();
 //        intent.putExtra(EXTRA_MESSAGE, message);
         startActivity(intent);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        running = true;
+        Sensor countSensor = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
+        if(countSensor != null){
+            sensorManager.registerListener(this, countSensor, sensorManager.SENSOR_DELAY_FASTEST);
+        }else{
+            Toast.makeText(this, "Sensor not found", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        running = false;
+    }
+
+    @Override
+    public void onSensorChanged(SensorEvent sensorEvent) {
+        if(running) {
+            int sensorValues = (int) sensorEvent.values[0];
+            String tv_content = sensorValues + " steps today...";
+            tv_steps.setText(tv_content);
+        }
+    }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int i) {
+        //do nothing
     }
 }
