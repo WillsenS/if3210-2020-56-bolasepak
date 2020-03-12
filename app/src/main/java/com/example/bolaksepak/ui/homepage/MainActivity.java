@@ -61,6 +61,7 @@ public class MainActivity extends AppCompatActivity {
         mMatchListView = (RecyclerView) findViewById(R.id.homepage_matchlist);
         //Fetch data from TheSportDB
         getMatchList();
+
         //Show result
         generateRecyclerViewMatchList();
         //Hide Loader
@@ -83,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
     private void getMatchList() {
         String getTeamIdByNameUrl = mGetTeamByNameUrl.concat(teamSearch);
 
-
+//        mMatchList.clear();
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
                 (Request.Method.GET, getTeamIdByNameUrl, null, new Response.Listener<JSONObject>() {
 
@@ -104,6 +105,7 @@ public class MainActivity extends AppCompatActivity {
                                     //Get all team matches
                                     getMatches(getLast5MatchByIdUrl, 1);
                                     getMatches(getNext5MatchByIdUrl, 2);
+
                                 }
                             } catch (JSONException e) {
                                 e.printStackTrace();
@@ -167,19 +169,15 @@ public class MainActivity extends AppCompatActivity {
                                                 mMatchList.get(i + numOfMatches).away_score = match.getInt("intAwayScore");
                                             }
 
-                                            setTeamBadge(mGetTeamByNameUrl + URLEncoder.encode((mMatchList.get(i + numOfMatches).home_name), "UTF-8"), i + numOfMatches, type, 1);
-                                            setTeamBadge(mGetTeamByNameUrl + URLEncoder.encode((mMatchList.get(i + numOfMatches).away_name), "UTF-8"), i + numOfMatches, type, 2);
+                                            setTeamBadge(mGetTeamByNameUrl + URLEncoder.encode((mMatchList.get(i + numOfMatches).home_name), "UTF-8"), i + numOfMatches, 1);
+                                            setTeamBadge(mGetTeamByNameUrl + URLEncoder.encode((mMatchList.get(i + numOfMatches).away_name), "UTF-8"), i + numOfMatches, 2);
                                             Log.d("Match index: ", String.valueOf(i + numOfMatches + 1));
                                             Log.d("home team: ", mMatchList.get(i + numOfMatches).home_name);
                                             Log.d("away_team: ", mMatchList.get(i + numOfMatches).away_name);
                                             Log.d("date: ", mMatchList.get(i + numOfMatches).date);
-                                            Log.d("home logo url", mMatchList.get(i + numOfMatches).home_logo_url);
-                                            Log.d("away logo url", mMatchList.get(i + numOfMatches).away_logo_url);
 
                                         }
                                         numOfMatches += matchJSONArray.length();
-                                        mMatchAdapter.notifyDataSetChanged();
-
                                     }
                                 }
                             } catch (JSONException | UnsupportedEncodingException e) {
@@ -199,7 +197,8 @@ public class MainActivity extends AppCompatActivity {
         MatchFetcherSingleton.getInstance(mContext).addToRequestQueue(jsonObjectRequest);
     }
 
-    private void setTeamBadge(String url, int idx, int eventType, int teamType) {
+    private void setTeamBadge(String url, int idx, int teamType) {
+        Log.d("index gambar", String.valueOf(idx));
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
                 (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
 
@@ -211,9 +210,11 @@ public class MainActivity extends AppCompatActivity {
                                 JSONObject team = matchJSONArray.getJSONObject(0);
                                 if (teamType == 1) {
                                     mMatchList.get(idx).home_logo_url = team.getString("strTeamBadge").concat("/preview");
+                                    Log.d("home_logo_url", mMatchList.get(idx).home_logo_url);
 
                                 } else {
                                     mMatchList.get(idx).away_logo_url = team.getString("strTeamBadge").concat("/preview");
+                                    Log.d("away_logo_url", mMatchList.get(idx).away_logo_url);
                                 }
 
                             } catch (JSONException e) {
@@ -229,7 +230,7 @@ public class MainActivity extends AppCompatActivity {
                         Log.d("ERROR FETCH URL: ", url);
                     }
                 });
-
+        mMatchAdapter.notifyDataSetChanged();
         MatchFetcherSingleton.getInstance(mContext).addToRequestQueue(jsonObjectRequest);
 
     }
