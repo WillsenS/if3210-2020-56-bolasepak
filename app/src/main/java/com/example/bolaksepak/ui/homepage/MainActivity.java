@@ -41,6 +41,8 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<Match> mMatchList = new ArrayList<>();
     private int[] mClubImages;
     private String teamSearch = "Arsenal";
+    private int numOfMatches = 0;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,11 +59,8 @@ public class MainActivity extends AppCompatActivity {
 
         //Fetch data from TheSportDB
         getMatchList();
-        Log.d("value", mMatchList.toString());
+        //Show result
         generateRecyclerViewMatchList();
-//        this.mMatchAdapter = new MatchAdapter(this, mMatchList, mClubImages);
-//        mMatchListView.setAdapter(mMatchAdapter);
-//        mMatchListView.setLayoutManager(new LinearLayoutManager(this));
 
 
     }
@@ -99,8 +98,8 @@ public class MainActivity extends AppCompatActivity {
                                     getNext5MatchByIdUrl = getNext5MatchByIdUrl.concat(teamId);
 
                                     //Get all team matches
-                                    getMatches(getLast5MatchByIdUrl, i, 1);
-                                    getMatches(getNext5MatchByIdUrl, i, 2);
+                                    getMatches(getLast5MatchByIdUrl, 1);
+                                    getMatches(getNext5MatchByIdUrl, 2);
                                 }
                             } catch (JSONException e) {
                                 e.printStackTrace();
@@ -121,7 +120,7 @@ public class MainActivity extends AppCompatActivity {
         MatchFetcherSingleton.getInstance(mContext).addToRequestQueue(jsonObjectRequest);
     }
 
-    private void getMatches(String url, int idx, int type) { //type = 1 -> prev, type = 2 => next
+    private void getMatches(String url, int type) { //type = 1 -> prev, type = 2 => next
         String apiKey;
         if (type == 1) {
             apiKey = "results";
@@ -138,38 +137,44 @@ public class MainActivity extends AppCompatActivity {
                                 if (!response.isNull(apiKey)) {
                                     JSONArray matchJSONArray = response.getJSONArray(apiKey);
                                     if (matchJSONArray.length() > 0) {
-                                        for (int i = 0; i < matchJSONArray.length(); i++) {
+                                        Log.i("numOfMatches", String.valueOf(numOfMatches));
+                                        Log.i("length of mMatchList array", String.valueOf(mMatchList.size()));
+                                        for (int i = 0; i <  matchJSONArray.length(); i++) {
+                                            mMatchList.add(new Match());
                                             JSONObject match = matchJSONArray.getJSONObject(i);
                                             //Assign data to match object
-                                            mMatchList.add(new Match());
-                                            mMatchList.get(idx).home_name = match.getString("strHomeTeam");
-                                            mMatchList.get(idx).home_id = match.getString("idHomeTeam");
-                                            mMatchList.get(idx).away_id = match.getString("idAwayTeam");
-                                            mMatchList.get(idx).away_name = match.getString("strAwayTeam");
+                                            mMatchList.get(i + numOfMatches).home_name = match.getString("strHomeTeam");
+                                            mMatchList.get(i + numOfMatches).home_id = match.getString("idHomeTeam");
+                                            mMatchList.get(i + numOfMatches).away_id = match.getString("idAwayTeam");
+                                            mMatchList.get(i + numOfMatches).away_name = match.getString("strAwayTeam");
                                             if (match.isNull("strDate")) {
-                                                mMatchList.get(idx).date = "TBA";
+                                                mMatchList.get(i + numOfMatches).date = "No Date Info";
                                             } else {
-                                                mMatchList.get(idx).date = match.getString("strDate");
+                                                mMatchList.get(i + numOfMatches).date = match.getString("strDate");
                                             }
                                             if (match.isNull("intHomeScore")) {
-                                                mMatchList.get(idx).home_score = 0;
+                                                mMatchList.get(i + numOfMatches).home_score = -1;
                                             } else {
-                                                mMatchList.get(idx).home_score = match.getInt("intHomeScore");
+                                                mMatchList.get(i + numOfMatches).home_score = match.getInt("intHomeScore");
                                             }
                                             if (match.isNull("intAwayScore")) {
-                                                mMatchList.get(idx).away_score = 0;
+                                                mMatchList.get(i + numOfMatches).away_score = -1;
                                             } else {
-                                                mMatchList.get(idx).away_score = match.getInt("intAwayScore");
+                                                mMatchList.get(i + numOfMatches).away_score = match.getInt("intAwayScore");
                                             }
-//                                            Log.d("home team: ", mMatchList.get(idx).home_name);
-//                                            Log.d("away_team: ", mMatchList.get(idx).away_name);
-//                                            Log.d("date: ", mMatchList.get(idx).date);
-//                                            //TODO: handle null
 
-                                            setTeamBadge(mGetTeamByNameUrl + URLEncoder.encode((mMatchList.get(idx).home_name), "UTF-8"), idx, type, 1);
-                                            setTeamBadge(mGetTeamByNameUrl + URLEncoder.encode((mMatchList.get(idx).away_name), "UTF-8"), idx, type, 2);
+                                            setTeamBadge(mGetTeamByNameUrl + URLEncoder.encode((mMatchList.get(i + numOfMatches).home_name), "UTF-8"), i + numOfMatches, type, 1);
+                                            setTeamBadge(mGetTeamByNameUrl + URLEncoder.encode((mMatchList.get(i + numOfMatches).away_name), "UTF-8"), i + numOfMatches, type, 2);
+                                            Log.d("Match index: ", String.valueOf(i + numOfMatches + 1));
+                                            Log.d("home team: ", mMatchList.get(i + numOfMatches).home_name);
+                                            Log.d("away_team: ", mMatchList.get(i + numOfMatches).away_name);
+                                            Log.d("date: ", mMatchList.get(i + numOfMatches).date);
+                                            Log.d("home logo url", mMatchList.get(i + numOfMatches).home_logo_url);
+                                            Log.d("away logo url", mMatchList.get(i + numOfMatches).away_logo_url);
 
                                         }
+                                        numOfMatches += matchJSONArray.length();
+
                                     }
                                 }
                             } catch (JSONException | UnsupportedEncodingException e) {
@@ -190,13 +195,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setTeamBadge(String url, int idx, int eventType, int teamType) {
-        Log.d("iscalled", url);
-        String apiKey;
-        if (eventType == 1) {
-            apiKey = "results";
-        } else {
-            apiKey = "events";
-        }
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
                 (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
 
@@ -204,7 +202,6 @@ public class MainActivity extends AppCompatActivity {
                     public void onResponse(JSONObject response) {
                         if (response != null) {
                             try {
-                                Log.d("resp", response.toString());
                                 JSONArray matchJSONArray = response.getJSONArray("teams");
                                 JSONObject team = matchJSONArray.getJSONObject(0);
                                 if (teamType == 1) {
@@ -213,11 +210,7 @@ public class MainActivity extends AppCompatActivity {
                                 } else {
                                     mMatchList.get(idx).away_logo_url = team.getString("strTeamBadge").concat("/preview");
                                 }
-                                Log.d("home team: ", mMatchList.get(idx).home_name);
-                                Log.d("away_team: ", mMatchList.get(idx).away_name);
-                                Log.d("date: ", mMatchList.get(idx).date);
-                                Log.d("home logo url", mMatchList.get(idx).home_logo_url);
-                                Log.d("away logo url", mMatchList.get(idx).away_logo_url);
+
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }

@@ -39,8 +39,13 @@ public class MatchAdapter extends RecyclerView.Adapter<MatchAdapter.MatchHolder>
         holder.match_date.setText(MatchList.get(position).date);
         holder.team1name.setText(MatchList.get(position).home_name);
         holder.away_name.setText(MatchList.get(position).away_name);
-        holder.home_score.setText(Integer.toString(MatchList.get(position).home_score));
-        holder.away_score.setText(Integer.toString(MatchList.get(position).away_score));
+        if (MatchList.get(position).home_score == -1 || MatchList.get(position).away_score == -1) {
+            holder.home_score.setText("-");
+            holder.away_score.setText("-");
+        } else {
+            holder.home_score.setText(String.valueOf(MatchList.get(position).home_score));
+            holder.away_score.setText(String.valueOf(MatchList.get(position).away_score));
+        }
 //        holder.home_logo.setImageResource(images[0]);
 //        holder.away_logo.setImageResource(images[1]);
     }
