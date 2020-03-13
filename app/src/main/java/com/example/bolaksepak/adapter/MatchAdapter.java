@@ -9,7 +9,6 @@ import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -24,7 +23,7 @@ import java.util.ArrayList;
 public class MatchAdapter extends RecyclerView.Adapter<MatchAdapter.MatchHolder> implements Filterable {
     private Context mContext;
     private ArrayList<Match> mMatchList; // Original list
-    private ArrayList<Match> mDisplayedMatchList; //list to be display
+    public ArrayList<Match> mDisplayedMatchList; //list to be display
     private int[] mImages;
     private OnMatchListener mOnMatchListener;
 
@@ -97,11 +96,9 @@ public class MatchAdapter extends RecyclerView.Adapter<MatchAdapter.MatchHolder>
 
             @Override
             protected FilterResults performFiltering(CharSequence constraint) {
-                //Toast.makeText(mContext, "filtering performed", Toast.LENGTH_SHORT).show();
                 FilterResults results = new FilterResults();
                 ArrayList<Match> filteredArrList = new ArrayList<Match>();
                 if (mMatchList == null) {
-                    Toast.makeText(mContext, "mMatchList null", Toast.LENGTH_SHORT).show();
                     mMatchList = new ArrayList<Match>(mDisplayedMatchList); // saves the original data in mOriginalValues
                 }
 

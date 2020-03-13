@@ -50,7 +50,7 @@ public class MainActivity extends AppCompatActivity implements MatchAdapter.OnMa
     private int mNumOfMatches = 0;
     private MatchAdapter mMatchAdapter = new MatchAdapter(this, mMatchList, mClubImages, this);
     private ProgressBar pb;
-    private String mTeamSearch = "Barcelona";
+    private String mTeamSearch = "";
     private TextInputEditText inputSearch;
 
     @Override
@@ -74,7 +74,7 @@ public class MainActivity extends AppCompatActivity implements MatchAdapter.OnMa
         generateRecyclerViewMatchList();
         //Hide Loader
 //        findViewById(R.id.homepage_progressbar).setVisibility(View.GONE);
-        Toast.makeText(MainActivity.this, "app created", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(MainActivity.this, "first load", Toast.LENGTH_SHORT).show();
 
         inputSearch = findViewById(R.id.input);
         inputSearch.addTextChangedListener(new TextWatcher(){
@@ -86,6 +86,8 @@ public class MainActivity extends AppCompatActivity implements MatchAdapter.OnMa
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 mMatchAdapter.getFilter().filter(s);
+                //mTeamSearch = s.toString();
+                //getMatchList();
                 generateRecyclerViewMatchList();
             }
 
@@ -288,7 +290,7 @@ public class MainActivity extends AppCompatActivity implements MatchAdapter.OnMa
     public void OnMatchClick(int position) {
         Log.d("Click Position", "OnMatchClick: " + position);
         Intent intent = new Intent(this, EventDetailActivity.class);
-        intent.putExtra("MATCH", mMatchList.get(position));
+        intent.putExtra("MATCH", mMatchAdapter.mDisplayedMatchList.get(position));
         startActivity(intent);
     }
 }
