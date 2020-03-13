@@ -1,6 +1,7 @@
 package com.example.bolaksepak;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 public class Team implements Serializable {
     private static final int HOME = 1;
@@ -10,7 +11,9 @@ public class Team implements Serializable {
     public int shots;
     public String logo_url;
     public String id;
-    public String[] goalDetails;
+    public ArrayList<String> goalDetails = new ArrayList<>();
+    public ArrayList<Match> pastMatch = new ArrayList<>();
+    public ArrayList<Match> nextMatch = new ArrayList<>();
 
     public Team(Match m, int type) {
         if (type == HOME) {
@@ -18,7 +21,7 @@ public class Team implements Serializable {
             score = m.home_score;
             shots = m.home_shots;
             logo_url = m.home_logo_url;
-            goalDetails = m.homeGoalDetails;
+            goalDetails =  m.homeGoalDetails;
             id = m.home_id;
         } else if (type == AWAY) {
             name = m.away_name;
@@ -43,9 +46,6 @@ public class Team implements Serializable {
         shots = t.shots;
         logo_url = t.logo_url;
         id = t.id;
-        if (t.goalDetails != null) {
-            goalDetails = new String[t.goalDetails.length];
-            System.arraycopy(t.goalDetails, 0, goalDetails, 0, goalDetails.length);
-        }
+        goalDetails = new ArrayList<>(t.goalDetails);
     }
 }

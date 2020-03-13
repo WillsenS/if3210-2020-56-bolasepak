@@ -5,22 +5,21 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 import android.widget.ProgressBar;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.bolaksepak.Match;
-import com.example.bolaksepak.adapter.MatchAdapter;
 import com.example.bolaksepak.R;
+import com.example.bolaksepak.adapter.MatchAdapter;
 import com.example.bolaksepak.api.matchschedule.MatchFetcherSingleton;
 import com.example.bolaksepak.ui.eventdetail.EventDetailActivity;
-
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -77,10 +76,6 @@ public class MainActivity extends AppCompatActivity implements MatchAdapter.OnMa
 
     }
 
-//    public void viewMatchDetail(View view) {
-//        Intent intent = new Intent(this, EventDetailActivity.class);
-//        startActivity(intent);
-//    }
 
     private void getMatchList() {
         String getTeamIdByNameUrl = mGetTeamByNameUrl.concat(mTeamSearch);
@@ -128,6 +123,8 @@ public class MainActivity extends AppCompatActivity implements MatchAdapter.OnMa
     }
 
     private void getMatches(String url, int type) { //type = 1 -> prev, type = 2 => next
+        //TODO: Pecah jadi 2 method, getLastMatch, sama getNextMatch biar bisa dipake ulang di TeamInfoActivity
+        //TODO: Bikin Interface MatchFetcher
         String apiKey;
         if (type == 1) {
             apiKey = "results";
@@ -147,10 +144,12 @@ public class MainActivity extends AppCompatActivity implements MatchAdapter.OnMa
                                         Log.i("mNumOfMatches", String.valueOf(mNumOfMatches));
                                         Log.i("length of mMatchList array", String.valueOf(mMatchList.size()));
                                         for (int i = 0; i < matchJSONArray.length(); i++) {
+                                            //TODO: Rubah jadi while, kalo val dari key strSport nya bukan Soccer gausah ditambah ke list
                                             mMatchList.add(new Match());
                                             JSONObject match = matchJSONArray.getJSONObject(i);
                                             //Assign data to match object
                                             //TODO: Semua ini dan validasinya pindahin ke kelasnya aja biar lebih clean
+
                                             mMatchList.get(i + mNumOfMatches).home_name = match.getString("strHomeTeam");
                                             mMatchList.get(i + mNumOfMatches).home_id = match.getString("idHomeTeam");
                                             mMatchList.get(i + mNumOfMatches).away_id = match.getString("idAwayTeam");
@@ -188,12 +187,13 @@ public class MainActivity extends AppCompatActivity implements MatchAdapter.OnMa
                                             //Assign Goal Details
                                             if (!match.isNull("strHomeGoalDetails")) {
                                                 String[] goalDetails = match.getString("strHomeGoalDetails").split(";");
-                                                mMatchList.get(i + mNumOfMatches).homeGoalDetails = goalDetails;
+//                                                mMatchList.get(i + mNumOfMatches).homeGoalDetails = (ArrayList<String>) Arrays.asList(goalDetails);
+                                                mMatchList.get(i + mNumOfMatches).homeGoalDetails = new ArrayList<>(Arrays.asList(goalDetails));
                                                 Log.d("HomeGoalDetails", "onResponse: " + Arrays.toString(goalDetails));
                                             }
                                             if (!match.isNull("strAwayGoalDetails")) {
                                                 String[] goalDetails = match.getString("strAwayGoalDetails").split(";");
-                                                mMatchList.get(i + mNumOfMatches).awayGoalDetails = goalDetails;
+                                                mMatchList.get(i + mNumOfMatches).awayGoalDetails = new ArrayList<>(Arrays.asList(goalDetails));
                                                 Log.d("AwayGoalDetails", "onResponse: " + Arrays.toString(goalDetails));
                                             }
 

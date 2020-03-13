@@ -13,16 +13,20 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.bolaksepak.Match;
+import com.example.bolaksepak.MatchFetch;
 import com.example.bolaksepak.R;
 import com.example.bolaksepak.Team;
 import com.example.bolaksepak.ui.eventdetail.EventDetailActivity;
 import com.example.bolaksepak.utils.MatchTeamDataLoader;
 import com.google.android.material.tabs.TabLayout;
 
-public class TeamInfoActivity extends AppCompatActivity {
+public class TeamInfoActivity extends AppCompatActivity implements MatchFetch {
     int mSelected = 0;
     boolean mInitialRender = true;
     Team mTeam;
+    Match[] mPastMatch;
+    Match[] mNextMatch;
     private ImageView mHeaderLogo;
     private TextView mHeaderTeamName;
     private static final MatchTeamDataLoader mDataLoader = new MatchTeamDataLoader();
@@ -129,5 +133,25 @@ public class TeamInfoActivity extends AppCompatActivity {
 //        String message = editText.getText().toString();
 //        intent.putExtra(EXTRA_MESSAGE, message);
         startActivity(intent);
+    }
+
+    @Override
+    public void getMatchListByTeamId() {
+
+    }
+
+    @Override
+    public void getLastMatchList() {
+
+    }
+
+    @Override
+    public void getNextMatchList() {
+
+    }
+
+    @Override
+    public void setTeamBadge() {
+
     }
 }

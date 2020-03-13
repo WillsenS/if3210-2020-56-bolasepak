@@ -3,6 +3,7 @@ package com.example.bolaksepak;
 import androidx.annotation.NonNull;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -19,8 +20,8 @@ public class Match implements Serializable {
     public String away_logo_url;
     public String home_id;
     public String away_id;
-    public String[] homeGoalDetails;
-    public String[] awayGoalDetails;
+    public ArrayList<String> homeGoalDetails;
+    public ArrayList<String> awayGoalDetails;
 
 
     public Match() {
@@ -58,14 +59,8 @@ public class Match implements Serializable {
         away_logo_url = m.away_logo_url;
         home_id = m.home_id;
         away_id = m.away_id;
-        if (m.homeGoalDetails != null && m.homeGoalDetails.length > 0) {
-            homeGoalDetails = new String[m.homeGoalDetails.length];
-            System.arraycopy(m.homeGoalDetails, 0, homeGoalDetails, 0, m.homeGoalDetails.length);
-        }
-        if (m.awayGoalDetails != null && m.awayGoalDetails.length > 0) {
-            awayGoalDetails = new String[m.awayGoalDetails.length];
-            System.arraycopy(m.awayGoalDetails, 0, awayGoalDetails, 0, m.awayGoalDetails.length);
-        }
+        homeGoalDetails = new ArrayList<>(m.homeGoalDetails);
+        awayGoalDetails = new ArrayList<>(m.awayGoalDetails);
     }
 
     @NonNull
