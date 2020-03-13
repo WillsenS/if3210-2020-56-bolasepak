@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.ProgressBar;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -45,6 +46,7 @@ public class MainActivity extends AppCompatActivity implements MatchAdapter.OnMa
     private MatchAdapter mMatchAdapter = new MatchAdapter(this, mMatchList, this);
     private ProgressBar pb;
     private String mTeamSearch = "Barcelona";
+    private static final int TEAM_DEAIL_RESULT_FLAG = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -264,6 +266,7 @@ public class MainActivity extends AppCompatActivity implements MatchAdapter.OnMa
         Intent intent = new Intent(this, EventDetailActivity.class);
         intent.putExtra("MATCH", mMatchList.get(position));
         startActivity(intent);
+
     }
 
     @Override
@@ -274,6 +277,8 @@ public class MainActivity extends AppCompatActivity implements MatchAdapter.OnMa
             queue.cancelAll(request -> true);
         }
     }
+
+
 }
 
 

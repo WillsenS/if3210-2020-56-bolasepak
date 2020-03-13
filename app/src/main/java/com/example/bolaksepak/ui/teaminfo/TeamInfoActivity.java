@@ -6,6 +6,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -13,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.android.volley.RequestQueue;
+import com.example.bolaksepak.Match;
 import com.example.bolaksepak.R;
 import com.example.bolaksepak.Team;
 import com.example.bolaksepak.api.matchschedule.MatchFetcherSingleton;
@@ -91,7 +93,9 @@ public class TeamInfoActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        NavUtils.navigateUpFromSameTask(this);
+        Intent intent = new Intent();
+        setResult(RESULT_OK, intent);
+        finish();
     }
 
     public void displayFragment() {
@@ -99,10 +103,8 @@ public class TeamInfoActivity extends AppCompatActivity {
         Log.d("EVENT", "DISPLAYFRAG");
         MatchListFragment fragment;
         if (mSelected == SEBELUM) {
-//            getLastMatchList();
             fragment = MatchListFragment.newInstance(mTeam.id, SEBELUM);
         } else { // (mSelected == SESUDAH)
-//            getNextMatchList();
             fragment = MatchListFragment.newInstance(mTeam.id, SESUDAH);
         }
         FragmentManager fragmentManager = getSupportFragmentManager();
