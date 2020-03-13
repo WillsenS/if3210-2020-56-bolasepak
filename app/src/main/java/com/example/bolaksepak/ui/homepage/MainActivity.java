@@ -1,8 +1,10 @@
 package com.example.bolaksepak.ui.homepage;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -10,6 +12,7 @@ import android.widget.ProgressBar;
 
 import com.android.volley.Request;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -60,6 +63,9 @@ public class MainActivity extends AppCompatActivity implements MatchAdapter.OnMa
     private ProgressBar pb;
     private String mTeamSearch = "Barcelona";
     private static final int TEAM_DEAIL_RESULT_FLAG = 1;
+    private TextView tv_steps;
+    private Intent serviceIntent;
+    private StepServiceReceiver receiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +81,7 @@ public class MainActivity extends AppCompatActivity implements MatchAdapter.OnMa
 //        findViewById(R.id.homepage_progressbar).setVisibility(View.VISIBLE);
         //Set Layout
         mMatchListView = (RecyclerView) findViewById(R.id.homepage_matchlist);
+        tv_steps = findViewById(R.id.tv_steps);
         //Fetch data from TheSportDB
         getMatchList();
 
@@ -83,7 +90,19 @@ public class MainActivity extends AppCompatActivity implements MatchAdapter.OnMa
         //Hide Loader
 //        findViewById(R.id.homepage_progressbar).setVisibility(View.GONE);
 
+        serviceIntent = new Intent(MainActivity.this, com.example.bolaksepak.service.StepCountService.class);
+        startService(serviceIntent);
+    }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        //Register BroadcastReceiver
+        //to receive event from our service
+        receiver = new StepServiceReceiver();
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction("UpdateSensorValues");
+        registerReceiver(receiver, intentFilter);
     }
 
     public void generateRecyclerViewMatchList() {
@@ -280,6 +299,7 @@ public class MainActivity extends AppCompatActivity implements MatchAdapter.OnMa
 
     @Override
     protected void onStop() {
+        unregisterReceiver(receiver);
         super.onStop();
         RequestQueue queue = MatchFetcherSingleton.getInstance(this).getRequestQueue();
         if (queue != null) {
@@ -288,6 +308,15 @@ public class MainActivity extends AppCompatActivity implements MatchAdapter.OnMa
     }
 
 
+    private class StepServiceReceiver extends BroadcastReceiver {
+        int sensorValues;
+        @Override
+        public void onReceive(Context arg0, Intent arg1) {
+            sensorValues = arg1.getIntExtra("Values", 0);
+            String tv_step = sensorValues + " steps today...";
+            tv_steps.setText(tv_step);
+        }
+    }
 }
 
 

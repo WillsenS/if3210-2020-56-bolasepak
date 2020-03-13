@@ -11,7 +11,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ui.teaminfo.TeamInfoActivity"></activity>
+        <activity android:name=".ui.teaminfo.TeamInfoActivity" />
+
         <activity android:name=".ui.eventdetail.EventDetailActivity" />
         <activity
             android:name=".ui.homepage.MainActivity"
@@ -23,7 +24,17 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <receiver android:name=".autoService">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
 
+        <service
+            android:name=".service.StepCountService"
+            android:enabled="true" />
     </application>
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.ACTIVITY_RECOGNITION" />
 
 </manifest>
