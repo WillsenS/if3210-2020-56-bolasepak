@@ -310,7 +310,7 @@ public class MatchListFragment extends Fragment {
                                 } else {
                                     match.get(idx).away_logo_url = team.getString("strTeamBadge").concat("/preview");
                                 }
-
+                                mMatchAdapter.notifyDataSetChanged();
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
@@ -327,6 +327,7 @@ public class MatchListFragment extends Fragment {
 
         mMatchAdapter.notifyDataSetChanged();
         MatchFetcherSingleton.getInstance(mContext).addToRequestQueue(jsonObjectRequest);
+
     }
 
 }

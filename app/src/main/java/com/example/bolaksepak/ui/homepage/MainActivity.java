@@ -238,6 +238,7 @@ public class MainActivity extends AppCompatActivity implements MatchAdapter.OnMa
                                 } else {
                                     mMatchList.get(idx).away_logo_url = team.getString("strTeamBadge").concat("/preview");
                                 }
+                                mMatchAdapter.notifyDataSetChanged();
 
                             } catch (JSONException e) {
                                 e.printStackTrace();
