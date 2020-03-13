@@ -35,3 +35,5 @@ Pengguna juga dapat melihat detail tim untuk melihat 2 buah tab "SEBELUM" dan "S
 - joda-time : compare date (mengecek beda hari) tidak peduli time untuk reset stepCounter service
 
 # Screenshot Aplikasi
+
+![HomePage](https://drive.google.com/file/d/1cmsxs7Q9FU7JfkOdx2gBgim75OB17I-R/view?usp=sharing)
