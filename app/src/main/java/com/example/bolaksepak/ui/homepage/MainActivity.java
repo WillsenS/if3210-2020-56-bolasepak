@@ -1,12 +1,17 @@
 package com.example.bolaksepak.ui.homepage;
 
 import android.app.Activity;
+import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -17,6 +22,7 @@ import com.example.bolaksepak.adapter.MatchAdapter;
 import com.example.bolaksepak.R;
 import com.example.bolaksepak.api.matchschedule.MatchFetcherSingleton;
 import com.example.bolaksepak.ui.eventdetail.EventDetailActivity;
+import com.google.android.material.textfield.TextInputEditText;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -45,6 +51,7 @@ public class MainActivity extends AppCompatActivity implements MatchAdapter.OnMa
     private MatchAdapter mMatchAdapter = new MatchAdapter(this, mMatchList, mClubImages, this);
     private ProgressBar pb;
     private String mTeamSearch = "Barcelona";
+    private TextInputEditText inputSearch;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,7 +74,26 @@ public class MainActivity extends AppCompatActivity implements MatchAdapter.OnMa
         generateRecyclerViewMatchList();
         //Hide Loader
 //        findViewById(R.id.homepage_progressbar).setVisibility(View.GONE);
+        Toast.makeText(MainActivity.this, "app created", Toast.LENGTH_SHORT).show();
 
+        inputSearch = findViewById(R.id.input);
+        inputSearch.addTextChangedListener(new TextWatcher(){
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                //do nothing
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                mMatchAdapter.getFilter().filter(s);
+                generateRecyclerViewMatchList();
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                //do nothing
+            }
+        });
 
     }
 
