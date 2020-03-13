@@ -262,7 +262,6 @@ public class MainActivity extends AppCompatActivity implements MatchAdapter.OnMa
 
     @Override
     public void OnMatchClick(int position) {
-        Log.d("Click Position", "OnMatchClick: " + position);
         Intent intent = new Intent(this, EventDetailActivity.class);
         intent.putExtra("MATCH", mMatchList.get(position));
         startActivity(intent);

@@ -1,6 +1,7 @@
 package com.example.bolaksepak.ui.teaminfo;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -23,6 +24,7 @@ import com.example.bolaksepak.Match;
 import com.example.bolaksepak.adapter.MatchAdapter;
 import com.example.bolaksepak.R;
 import com.example.bolaksepak.api.matchschedule.MatchFetcherSingleton;
+import com.example.bolaksepak.ui.eventdetail.EventDetailActivity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -39,7 +41,7 @@ import java.util.Objects;
  * Use the {@link MatchListFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class MatchListFragment extends Fragment {
+public class MatchListFragment extends Fragment implements MatchAdapter.OnMatchListener {
 
 
     private static final String mGetTeamByNameUrl = "https://www.thesportsdb.com/api/v1/json/1/searchteams.php?t=";
@@ -50,7 +52,7 @@ public class MatchListFragment extends Fragment {
     private ArrayList<Match> mMatch = new ArrayList<>();
     private String id;
     private int type;
-    private MatchAdapter mMatchAdapter = new MatchAdapter(getContext(), mMatch, null);
+    private MatchAdapter mMatchAdapter;
 
 
     public MatchListFragment() {
@@ -70,14 +72,12 @@ public class MatchListFragment extends Fragment {
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         mContext = context;
+        mMatchAdapter = new MatchAdapter(mContext, mMatch, this);
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (mContext != null) {
-            this.mMatchAdapter = new MatchAdapter(mContext, mMatch, null);
-        }
         Bundle args = getArguments();
         assert args != null;
         this.id = args.getString(TEAM_ID);
@@ -326,4 +326,11 @@ public class MatchListFragment extends Fragment {
 
     }
 
+    @Override
+    public void OnMatchClick(int position) {
+        Log.d("OnMatchClicked", "OnMatchClick (Fragment): ");
+        Intent intent = new Intent(mContext, EventDetailActivity.class);
+        intent.putExtra("MATCH", mMatch.get(position));
+        startActivity(intent);
+    }
 }

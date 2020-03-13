@@ -17,12 +17,14 @@ import com.android.volley.RequestQueue;
 import com.example.bolaksepak.Match;
 import com.example.bolaksepak.R;
 import com.example.bolaksepak.Team;
+import com.example.bolaksepak.adapter.MatchAdapter;
 import com.example.bolaksepak.api.matchschedule.MatchFetcherSingleton;
+import com.example.bolaksepak.ui.eventdetail.EventDetailActivity;
 import com.example.bolaksepak.utils.MatchTeamDataLoader;
 import com.google.android.material.tabs.TabLayout;
 
 
-public class TeamInfoActivity extends AppCompatActivity {
+public class TeamInfoActivity extends AppCompatActivity{
     private static final MatchTeamDataLoader mDataLoader = new MatchTeamDataLoader();
 
     private static final int SEBELUM = 1;
@@ -143,4 +145,7 @@ public class TeamInfoActivity extends AppCompatActivity {
             queue.cancelAll(request -> true);
         }
     }
+
+
+
 }
