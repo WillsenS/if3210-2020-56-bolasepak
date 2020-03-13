@@ -3,53 +3,65 @@ package com.example.bolaksepak.api.weather;
 import java.util.ArrayList;
 
 public class weather {
-    private Coord CoordObject;
-    ArrayList<Object> weather = new ArrayList<Object>();
-    private String base;
-    private Main MainObject;
-    private float visibility;
-    private Wind WindObject;
-    private Clouds CloudsObject;
-    private float dt;
-    private Sys SysObject;
-    private float id;
-    private String name;
-    private float cod;
+    private String cod;
+    private float message;
+    private float cnt;
+    ArrayList<Object> list = new ArrayList<Object>();
+    private City CityObject;
 
 
     // Getter Methods
 
-    public Coord getCoord() {
-        return CoordObject;
+    public String getCod() {
+        return cod;
     }
 
-    public String getBase() {
-        return base;
+    public float getMessage() {
+        return message;
     }
 
-    public Main getMain() {
-        return MainObject;
+    public float getCnt() {
+        return cnt;
     }
 
-    public float getVisibility() {
-        return visibility;
+    public ArrayList<Object> getList() {
+        return list;
     }
 
-    public Wind getWind() {
-        return WindObject;
+    public City getCity() {
+        return CityObject;
     }
 
-    public Clouds getClouds() {
-        return CloudsObject;
+    // Setter Methods
+
+    public void setCod( String cod ) {
+        this.cod = cod;
     }
 
-    public float getDt() {
-        return dt;
+    public void setMessage( float message ) {
+        this.message = message;
     }
 
-    public Sys getSys() {
-        return SysObject;
+    public void setCnt( float cnt ) {
+        this.cnt = cnt;
     }
+
+    public void setCity( City cityObject ) {
+        this.CityObject = cityObject;
+    }
+}
+class City {
+    private float id;
+    private String name;
+    private Coord CoordObject;
+    private String country;
+    private float population;
+    private float timezone;
+    private float sunrise;
+    private float sunset;
+
+
+    // Getter Methods
 
     public float getId() {
         return id;
@@ -59,36 +71,20 @@ public class weather {
         return name;
     }
 
-    public float getCod() {
-        return cod;
-    }
-
-}
-class Sys {
-    private float type;
-    private float id;
-    private float message;
-    private String country;
-    private float sunrise;
-    private float sunset;
-
-
-    // Getter Methods
-
-    public float getType() {
-        return type;
-    }
-
-    public float getId() {
-        return id;
-    }
-
-    public float getMessage() {
-        return message;
+    public Coord getCoord() {
+        return CoordObject;
     }
 
     public String getCountry() {
         return country;
+    }
+
+    public float getPopulation() {
+        return population;
+    }
+
+    public float getTimezone() {
+        return timezone;
     }
 
     public float getSunrise() {
@@ -99,77 +95,62 @@ class Sys {
         return sunset;
     }
 
-}
-class Clouds {
-    private float all;
+    // Setter Methods
 
-
-    // Getter Methods
-
-    public float getAll() {
-        return all;
+    public void setId( float id ) {
+        this.id = id;
     }
 
-}
-class Wind {
-    private float speed;
-    private float deg;
-
-
-    // Getter Methods
-
-    public float getSpeed() {
-        return speed;
+    public void setName( String name ) {
+        this.name = name;
     }
 
-    public float getDeg() {
-        return deg;
-    }
-}
-class Main {
-    private float temp;
-    private float pressure;
-    private float humidity;
-    private float temp_min;
-    private float temp_max;
-
-
-    // Getter Methods
-
-    public float getTemp() {
-        return temp;
+    public void setCoord( Coord coordObject ) {
+        this.CoordObject = coordObject;
     }
 
-    public float getPressure() {
-        return pressure;
+    public void setCountry( String country ) {
+        this.country = country;
     }
 
-    public float getHumidity() {
-        return humidity;
+    public void setPopulation( float population ) {
+        this.population = population;
     }
 
-    public float getTemp_min() {
-        return temp_min;
+    public void setTimezone( float timezone ) {
+        this.timezone = timezone;
     }
 
-    public float getTemp_max() {
-        return temp_max;
+    public void setSunrise( float sunrise ) {
+        this.sunrise = sunrise;
     }
 
+    public void setSunset( float sunset ) {
+        this.sunset = sunset;
+    }
 }
 class Coord {
-    private float lon;
     private float lat;
+    private float lon;
 
 
     // Getter Methods
-
-    public float getLon() {
-        return lon;
-    }
 
     public float getLat() {
         return lat;
     }
 
+    public float getLon() {
+        return lon;
+    }
+
+    // Setter Methods
+
+    public void setLat( float lat ) {
+        this.lat = lat;
+    }
+
+    public void setLon( float lon ) {
+        this.lon = lon;
+    }
 }
