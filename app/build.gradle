@@ -41,4 +41,7 @@ dependencies {
     implementation 'org.apache.commons:commons-text:1.6'
     implementation 'com.squareup.picasso:picasso:2.71828'
     implementation 'joda-time:joda-time:2.9.9'
+    implementation 'io.reactivex:rxandroid:1.0.1'
+    implementation 'io.reactivex:rxjava:1.0.14'
+    implementation 'com.artemzin.rxjava:proguard-rules:1.0.14.2'
 }
