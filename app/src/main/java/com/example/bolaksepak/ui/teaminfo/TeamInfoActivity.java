@@ -1,28 +1,60 @@
-package com.example.bolaksepak.teaminfo;
+package com.example.bolaksepak.ui.teaminfo;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NavUtils;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 
+import com.android.volley.RequestQueue;
+import com.example.bolaksepak.Match;
 import com.example.bolaksepak.R;
-import com.example.bolaksepak.eventdetail.EventDetailActivity;
+import com.example.bolaksepak.Team;
+import com.example.bolaksepak.adapter.MatchAdapter;
+import com.example.bolaksepak.api.matchschedule.MatchFetcherSingleton;
+import com.example.bolaksepak.ui.eventdetail.EventDetailActivity;
+import com.example.bolaksepak.utils.MatchTeamDataLoader;
 import com.google.android.material.tabs.TabLayout;
 
-public class TeamInfoActivity extends AppCompatActivity {
-    int selected = 0;
-    boolean initialRender = true;
+
+public class TeamInfoActivity extends AppCompatActivity{
+    private static final MatchTeamDataLoader mDataLoader = new MatchTeamDataLoader();
+
+    private static final int SEBELUM = 1;
+    private static final int SESUDAH = 0;
+    int mSelected = 0;
+    boolean mInitialRender = true;
+    Team mTeam;
+    private ImageView mHeaderLogo;
+    private TextView mHeaderTeamName;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //Get Team Data from intent
+        Team team = (Team) getIntent().getSerializableExtra("TEAM_DATA");
+        assert team != null;
+        mTeam = new Team(team);
+        //Set layout
         setContentView(R.layout.activity_team_info);
-        TabLayout tabs = (TabLayout) findViewById(R.id.tabs);
+
+        //Find Element by ID
+        mHeaderLogo = findViewById(R.id.header_logo);
+        mHeaderTeamName = findViewById((R.id.header_team_name));
+
+        //Put data into UI
+        mDataLoader.loadImage(team.logo_url, mHeaderLogo);
+        mHeaderTeamName.setText(team.name);
+
+        TabLayout tabs = findViewById(R.id.tabs);
         tabs.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
@@ -30,10 +62,10 @@ public class TeamInfoActivity extends AppCompatActivity {
                 int pos = tab.getPosition();
                 switch (pos) {
                     case 0:
-                        selected = 0;
+                        mSelected = 0;
                         break;
                     case 1:
-                        selected = 1;
+                        mSelected = 1;
                         break;
                     default:
                         Log.d("Tab", "Gak ada yang ke select");
@@ -55,35 +87,32 @@ public class TeamInfoActivity extends AppCompatActivity {
 
         });
 
-        if (initialRender) {
-            initialRender = false;
+        if (mInitialRender) {
+            mInitialRender = false;
             displayFragment();
         }
     }
 
     @Override
     public void onBackPressed() {
-        NavUtils.navigateUpFromSameTask(this);
+        Intent intent = new Intent();
+        setResult(RESULT_OK, intent);
+        finish();
     }
 
     public void displayFragment() {
-        Log.d("EVENT", "DISPLAYFRAG");
-        int[] clubImages;
-        if (selected == 0) {
-            clubImages = new int[]{R.drawable.club1, R.drawable.club2};
-        } else if (selected == 1) {
-            clubImages = new int[]{R.drawable.club3, R.drawable.club4};
-        } else {
-            clubImages = new int[]{R.drawable.club3, R.drawable.club3};
-        }
-        MatchListFragment fragment = MatchListFragment.newInstance(clubImages);
 
+        Log.d("EVENT", "DISPLAYFRAG");
+        MatchListFragment fragment;
+        if (mSelected == SEBELUM) {
+            fragment = MatchListFragment.newInstance(mTeam.id, SEBELUM);
+        } else { // (mSelected == SESUDAH)
+            fragment = MatchListFragment.newInstance(mTeam.id, SESUDAH);
+        }
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
-        if (fragmentTransaction != null) {
-            fragmentTransaction.replace(R.id.match_fragment_container, fragment).addToBackStack(null).commit();
-        }
+        fragmentTransaction.replace(R.id.match_fragment_container, fragment).addToBackStack(null).commit();
     }
 
     public void closeFragment() {
@@ -100,10 +129,23 @@ public class TeamInfoActivity extends AppCompatActivity {
     }
 
     public void viewMatchDetail(View view) {
-        Intent intent = new Intent(this, EventDetailActivity.class);
+//        Intent intent = new Intent(this, EventDetailActivity.class);
 //        EditText editText = (EditText) findViewById(R.id.editText);
 //        String message = editText.getText().toString();
 //        intent.putExtra(EXTRA_MESSAGE, message);
-        startActivity(intent);
+//        startActivity(intent);
     }
+
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        RequestQueue queue = MatchFetcherSingleton.getInstance(this).getRequestQueue();
+        if (queue != null) {
+            queue.cancelAll(request -> true);
+        }
+    }
+
+
+
 }
