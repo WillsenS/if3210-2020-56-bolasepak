@@ -9,6 +9,15 @@ import android.view.View;
 import android.widget.ProgressBar;
 
 import com.android.volley.Request;
+import android.widget.ProgressBar;
+
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
@@ -21,6 +30,11 @@ import com.example.bolaksepak.ui.eventdetail.EventDetailActivity;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.bolaksepak.R;
+import com.example.bolaksepak.adapter.MatchAdapter;
+import com.example.bolaksepak.api.matchschedule.MatchFetcherSingleton;
+import com.example.bolaksepak.ui.eventdetail.EventDetailActivity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -42,9 +56,10 @@ public class MainActivity extends AppCompatActivity implements MatchAdapter.OnMa
     private ArrayList<Match> mMatchList = new ArrayList<>();
     private int[] mClubImages;
     private int mNumOfMatches = 0;
-    private MatchAdapter mMatchAdapter = new MatchAdapter(this, mMatchList, mClubImages, this);
+    private MatchAdapter mMatchAdapter = new MatchAdapter(this, mMatchList, this);
     private ProgressBar pb;
     private String mTeamSearch = "Barcelona";
+    private static final int TEAM_DEAIL_RESULT_FLAG = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,10 +92,6 @@ public class MainActivity extends AppCompatActivity implements MatchAdapter.OnMa
 
     }
 
-//    public void viewMatchDetail(View view) {
-//        Intent intent = new Intent(this, EventDetailActivity.class);
-//        startActivity(intent);
-//    }
 
     private void getMatchList() {
         String getTeamIdByNameUrl = mGetTeamByNameUrl.concat(mTeamSearch);
@@ -144,9 +155,8 @@ public class MainActivity extends AppCompatActivity implements MatchAdapter.OnMa
                                 if (!response.isNull(apiKey)) {
                                     JSONArray matchJSONArray = response.getJSONArray(apiKey);
                                     if (matchJSONArray.length() > 0) {
-                                        Log.i("mNumOfMatches", String.valueOf(mNumOfMatches));
-                                        Log.i("length of mMatchList array", String.valueOf(mMatchList.size()));
                                         for (int i = 0; i < matchJSONArray.length(); i++) {
+                                            //TODO: Rubah jadi while, kalo val dari key strSport nya bukan Soccer gausah ditambah ke list
                                             mMatchList.add(new Match());
                                             JSONObject match = matchJSONArray.getJSONObject(i);
                                             //Assign data to match object
@@ -188,19 +198,20 @@ public class MainActivity extends AppCompatActivity implements MatchAdapter.OnMa
                                             //Assign Goal Details
                                             if (!match.isNull("strHomeGoalDetails")) {
                                                 String[] goalDetails = match.getString("strHomeGoalDetails").split(";");
-                                                mMatchList.get(i + mNumOfMatches).homeGoalDetails = goalDetails;
-                                                Log.d("HomeGoalDetails", "onResponse: " + Arrays.toString(goalDetails));
+                                                mMatchList.get(i + mNumOfMatches).homeGoalDetails = new ArrayList<>(Arrays.asList(goalDetails));
+//                                                Log.d("HomeGoalDetails", mMatchList.get(i + mNumOfMatches).home_name+ " :" + Arrays.toString(goalDetails));
+//                                                Log.d("arraylist", String.valueOf(mMatchList.get(i + mNumOfMatches).homeGoalDetails));
                                             }
                                             if (!match.isNull("strAwayGoalDetails")) {
                                                 String[] goalDetails = match.getString("strAwayGoalDetails").split(";");
-                                                mMatchList.get(i + mNumOfMatches).awayGoalDetails = goalDetails;
-                                                Log.d("AwayGoalDetails", "onResponse: " + Arrays.toString(goalDetails));
+                                                mMatchList.get(i + mNumOfMatches).awayGoalDetails = new ArrayList<>(Arrays.asList(goalDetails));
+//                                                Log.d("AwayGoalDetails", mMatchList.get(i + mNumOfMatches).away_name + " :" + Arrays.toString(goalDetails));
+//                                                Log.d("arraylist", String.valueOf(mMatchList.get(i + mNumOfMatches).awayGoalDetails));
                                             }
 
                                             //Assign Team Badge
                                             setTeamBadge(mGetTeamByNameUrl + URLEncoder.encode((mMatchList.get(i + mNumOfMatches).home_name), "UTF-8"), i + mNumOfMatches, 1);
                                             setTeamBadge(mGetTeamByNameUrl + URLEncoder.encode((mMatchList.get(i + mNumOfMatches).away_name), "UTF-8"), i + mNumOfMatches, 2);
-                                            Log.d("Match index: ", String.valueOf(i + mNumOfMatches + 1));
 
                                         }
                                         mNumOfMatches += matchJSONArray.length();
@@ -239,6 +250,7 @@ public class MainActivity extends AppCompatActivity implements MatchAdapter.OnMa
                                 } else {
                                     mMatchList.get(idx).away_logo_url = team.getString("strTeamBadge").concat("/preview");
                                 }
+                                mMatchAdapter.notifyDataSetChanged();
 
                             } catch (JSONException e) {
                                 e.printStackTrace();
@@ -260,11 +272,22 @@ public class MainActivity extends AppCompatActivity implements MatchAdapter.OnMa
 
     @Override
     public void OnMatchClick(int position) {
-        Log.d("Click Position", "OnMatchClick: " + position);
         Intent intent = new Intent(this, EventDetailActivity.class);
         intent.putExtra("MATCH", mMatchList.get(position));
         startActivity(intent);
+
     }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        RequestQueue queue = MatchFetcherSingleton.getInstance(this).getRequestQueue();
+        if (queue != null) {
+            queue.cancelAll(request -> true);
+        }
+    }
+
+
 }
 
 

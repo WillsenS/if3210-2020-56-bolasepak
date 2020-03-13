@@ -1,6 +1,7 @@
 package com.example.bolaksepak.adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,13 +10,16 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.bolaksepak.Match;
 import com.example.bolaksepak.R;
 
+import java.util.ArrayList;
+
 public class GoalDetailAdapter extends RecyclerView.Adapter<GoalDetailAdapter.GoalDetailHolder> {
-    private String[] mGoalList;
+    private ArrayList<String> mGoalList;
     private Context mContext;
 
-    public GoalDetailAdapter(Context ctx, String[] goalList) {
+    public GoalDetailAdapter(Context ctx, ArrayList<String> goalList) {
         this.mContext = ctx;
         this.mGoalList = goalList;
     }
@@ -31,12 +35,12 @@ public class GoalDetailAdapter extends RecyclerView.Adapter<GoalDetailAdapter.Go
 
     @Override
     public void onBindViewHolder(@NonNull GoalDetailHolder holder, int position) {
-        holder.goalItem.setText(mGoalList[position]);
+        holder.goalItem.setText((CharSequence) mGoalList.get(position));
     }
 
     @Override
     public int getItemCount() {
-        return mGoalList.length;
+        return mGoalList.size();
     }
 
     static class GoalDetailHolder extends RecyclerView.ViewHolder {

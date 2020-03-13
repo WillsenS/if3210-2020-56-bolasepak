@@ -11,11 +11,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ui.teaminfo.TeamInfoActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".ui.eventdetail.EventDetailActivity" />
-        </activity>
+        <activity android:name=".ui.teaminfo.TeamInfoActivity"></activity>
         <activity android:name=".ui.eventdetail.EventDetailActivity" />
         <activity
             android:name=".ui.homepage.MainActivity"

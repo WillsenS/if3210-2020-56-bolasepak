@@ -2,14 +2,17 @@ package com.example.bolaksepak.ui.eventdetail;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.android.volley.RequestQueue;
 import com.example.bolaksepak.Match;
 import com.example.bolaksepak.R;
 import com.example.bolaksepak.Team;
@@ -34,8 +37,12 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+import com.example.bolaksepak.api.matchschedule.MatchFetcherSingleton;
+import com.example.bolaksepak.ui.teaminfo.TeamInfoActivity;
+import com.example.bolaksepak.utils.MatchTeamDataLoader;
 
 public class EventDetailActivity extends AppCompatActivity {
+    private static final int TEAM_DETAIL_RESULT_FLAG = 1;
     private Match mMatch;
     private TextView mMatchDate;
     private ImageView mHomeLogo;
@@ -59,6 +66,7 @@ public class EventDetailActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.d("Yang mana yang duluan", "onCreate: ");
         setContentView(R.layout.activity_event_detail);
         Intent intent = getIntent();
         Match m = (Match) intent.getSerializableExtra("MATCH");
@@ -178,6 +186,24 @@ public class EventDetailActivity extends AppCompatActivity {
     public void viewAwayTeam(View view) {
         Intent intent = new Intent(this, TeamInfoActivity.class);
         intent.putExtra("TEAM_DATA", new Team(mMatch, AWAY));
-        startActivity(intent);
+        startActivityForResult(intent, TEAM_DETAIL_RESULT_FLAG);
     }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        RequestQueue queue = MatchFetcherSingleton.getInstance(this).getRequestQueue();
+        if (queue != null) {
+            queue.cancelAll(request -> true);
+        }
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
+
+
 }

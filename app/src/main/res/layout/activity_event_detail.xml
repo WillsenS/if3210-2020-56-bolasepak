@@ -75,7 +75,7 @@
 
     <ImageView
         android:id="@+id/home_club_logo"
-        android:layout_width="0dp"
+        android:layout_width="75dp"
         android:layout_height="75dp"
         android:layout_marginStart="24dp"
         android:layout_marginEnd="56dp"
@@ -120,17 +120,6 @@
         app:layout_constraintVertical_bias="0.048" />
 
     <TextView
-        android:id="@+id/title_goals"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="GOALS"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/title_shots" />
-
-    <TextView
         android:id="@+id/home_shots"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
@@ -156,9 +145,8 @@
         android:id="@+id/home_goal_detail"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="40dp"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="16dp"
-        app:layout_constraintEnd_toStartOf="@+id/title_goals"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/home_shots" />
 
@@ -166,10 +154,9 @@
         android:id="@+id/away_goal_detail"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
+        android:layout_marginEnd="40dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/title_goals"
         app:layout_constraintTop_toBottomOf="@+id/away_shots" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
