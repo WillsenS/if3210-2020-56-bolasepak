@@ -13,9 +13,9 @@ public interface weatherDB {
     //pro.openweathermap.org/data/2.5/forecast/hourly?q={city name}&appid={your api key}
     //api key: fc96c0a7669abfee97f8d1b30efca557
 
-    @GET("hourly")
-    Call<List<weather>> getWeather(
-            @Query("q") String city,
-            @Query("appid") String api
+    @GET("forecast")
+    Call<WeatherAPI> getWeather(
+            @Query("q") String q,
+            @Query("appid") String appid
     );
 }

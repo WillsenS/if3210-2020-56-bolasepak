@@ -24,6 +24,7 @@ public class Match implements Serializable {
     public ArrayList<String> awayGoalDetails;
 
 
+
     public Match() {
         date = "";
         home_name = "";
@@ -36,6 +37,7 @@ public class Match implements Serializable {
         away_logo_url = "";
         home_id = "";
         away_id = "";
+        //weather = "";
 
     }
 
@@ -59,6 +61,7 @@ public class Match implements Serializable {
         away_logo_url = m.away_logo_url;
         home_id = m.home_id;
         away_id = m.away_id;
+
         if (m.homeGoalDetails !=null) {
             homeGoalDetails = new ArrayList<>(m.homeGoalDetails);
         }
