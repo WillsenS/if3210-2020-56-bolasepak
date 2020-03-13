@@ -35,8 +35,6 @@ public class GoalDetailAdapter extends RecyclerView.Adapter<GoalDetailAdapter.Go
 
     @Override
     public void onBindViewHolder(@NonNull GoalDetailHolder holder, int position) {
-//        Log.d("Goals: ", "onBindViewHolder: " + mGoalList.toString());
-        Log.d("Goalee", "onBindViewHolder: " + mGoalList.get(position));
         holder.goalItem.setText((CharSequence) mGoalList.get(position));
     }
 

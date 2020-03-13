@@ -48,7 +48,6 @@ public class TeamInfoActivity extends AppCompatActivity {
     private ImageView mHeaderLogo;
     private TextView mHeaderTeamName;
     private Context mContext;
-    private MatchAdapter mMatchAdapter;
 
 
     @Override
@@ -118,16 +117,13 @@ public class TeamInfoActivity extends AppCompatActivity {
 
         Log.d("EVENT", "DISPLAYFRAG");
         MatchListFragment fragment;
-        if (mSelected == SEBELUM) { //TODO: Fungsi Fetch nya belom dipanggil
+        if (mSelected == SEBELUM) {
             getLastMatchList();
-            mMatchAdapter = new MatchAdapter(mContext, mPastMatch, null);
             fragment = MatchListFragment.newInstance(mPastMatch);
         } else { // (mSelected == SESUDAH)
             getNextMatchList();
-            mMatchAdapter = new MatchAdapter(mContext, mNextMatch, null);
             fragment = MatchListFragment.newInstance(mNextMatch);
         }
-
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
@@ -169,6 +165,7 @@ public class TeamInfoActivity extends AppCompatActivity {
                                 if (!response.isNull("results")) {
                                     JSONArray matchJSONArray = response.getJSONArray("results");
                                     if (matchJSONArray.length() > 0) {
+                                        Log.d("Panjang MatchJSONArr last: ", String.valueOf(matchJSONArray.length()));
                                         for (int i = 0; i < matchJSONArray.length(); i++) {
                                             mPastMatch.add(new Match());
                                             JSONObject match = matchJSONArray.getJSONObject(i);
@@ -355,7 +352,6 @@ public class TeamInfoActivity extends AppCompatActivity {
                         Log.d("ERROR FETCH URL: ", url);
                     }
                 });
-        mMatchAdapter.notifyDataSetChanged();
         MatchFetcherSingleton.getInstance(mContext).addToRequestQueue(jsonObjectRequest);
     }
 
