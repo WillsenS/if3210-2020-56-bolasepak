@@ -47,14 +47,10 @@ public class MatchListFragment extends Fragment {
     private static final String TEAM_ID = "TEAM_ID";
     private static final int SEBELUM = 1;
     private Context mContext;
-    //    private ArrayList<Match> mMatch = new ArrayList<>();
-//    private ArrayList<Match> mMatch = new ArrayList<>();
     private ArrayList<Match> mMatch = new ArrayList<>();
     private String id;
     private int type;
     private MatchAdapter mMatchAdapter = new MatchAdapter(getContext(), mMatch, null);
-//    private MatchAdapter mMatchAdapter = new MatchAdapter(getContext(), mMatch, null);
-//    private MatchAdapter mMatchAdapter = new MatchAdapter(getContext(), mMatch, null);
 
 
     public MatchListFragment() {
