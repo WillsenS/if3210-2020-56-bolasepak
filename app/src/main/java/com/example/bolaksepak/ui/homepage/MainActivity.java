@@ -6,6 +6,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
@@ -38,6 +40,7 @@ import com.example.bolaksepak.R;
 import com.example.bolaksepak.adapter.MatchAdapter;
 import com.example.bolaksepak.api.matchschedule.MatchFetcherSingleton;
 import com.example.bolaksepak.ui.eventdetail.EventDetailActivity;
+import com.google.android.material.textfield.TextInputEditText;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -47,6 +50,11 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.concurrent.TimeUnit;
+
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
+import rx.subjects.PublishSubject;
 
 
 public class MainActivity extends AppCompatActivity implements MatchAdapter.OnMatchListener {
@@ -66,19 +74,22 @@ public class MainActivity extends AppCompatActivity implements MatchAdapter.OnMa
     private TextView tv_steps;
     private Intent serviceIntent;
     private StepServiceReceiver receiver;
+    private TextInputEditText inputSearch;
+    private RequestQueue queue;
+    //Input processing
+    private PublishSubject<String> subject;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.homepage);
-
+        queue = MatchFetcherSingleton.getInstance(this).getRequestQueue();
         // Get the application context
         mContext = getApplicationContext();
         mActivity = MainActivity.this;
 
-        //Show loader
-//        findViewById(R.id.homepage_progressbar).setVisibility(View.VISIBLE);
         //Set Layout
         mMatchListView = (RecyclerView) findViewById(R.id.homepage_matchlist);
         tv_steps = findViewById(R.id.tv_steps);
@@ -87,8 +98,49 @@ public class MainActivity extends AppCompatActivity implements MatchAdapter.OnMa
 
         //Show result
         generateRecyclerViewMatchList();
-        //Hide Loader
-//        findViewById(R.id.homepage_progressbar).setVisibility(View.GONE);
+
+        subject = PublishSubject.create();
+        subject.debounce(300, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
+                .onBackpressureLatest()
+                .subscribe(new Action1<String>() {
+                    @Override
+                    public void call(String s) {
+                        // Whatever processing on user String
+                        mTeamSearch = s.toString();
+                        if (mTeamSearch.length() > 0 && s.toString() != null) {
+                            Log.d("tessss", "onTextChanged: " + s);
+                            if (queue != null) {
+                                Log.d("REQ", "onTextChanged: dibatalkan requestnya");
+                                queue.cancelAll(request -> true);
+                            }
+                            getMatchList();
+                            generateRecyclerViewMatchList();
+                        }
+                    }
+                });
+
+        inputSearch = findViewById(R.id.input);
+        inputSearch.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                //do nothing
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                subject.onNext(s.toString());
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+
+
+
 
         serviceIntent = new Intent(MainActivity.this, com.example.bolaksepak.service.StepCountService.class);
         startService(serviceIntent);
@@ -106,6 +158,7 @@ public class MainActivity extends AppCompatActivity implements MatchAdapter.OnMa
     }
 
     public void generateRecyclerViewMatchList() {
+        mMatchAdapter.notifyDataSetChanged();
         mMatchListView.setAdapter(mMatchAdapter);
         mMatchListView.setLayoutManager(new LinearLayoutManager(this));
 
@@ -113,9 +166,11 @@ public class MainActivity extends AppCompatActivity implements MatchAdapter.OnMa
 
 
     private void getMatchList() {
+        Log.d("getMatchList", "getMatchList: terpanggil");
         String getTeamIdByNameUrl = mGetTeamByNameUrl.concat(mTeamSearch);
 
-//        mMatchList.clear();
+        mMatchList.clear();
+        mNumOfMatches = 0;
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
                 (Request.Method.GET, getTeamIdByNameUrl, null, new Response.Listener<JSONObject>() {
 
@@ -184,6 +239,8 @@ public class MainActivity extends AppCompatActivity implements MatchAdapter.OnMa
                                             mMatchList.get(i + mNumOfMatches).home_id = match.getString("idHomeTeam");
                                             mMatchList.get(i + mNumOfMatches).away_id = match.getString("idAwayTeam");
                                             mMatchList.get(i + mNumOfMatches).away_name = match.getString("strAwayTeam");
+                                            Log.d("nama home team", "onResponse: " + mMatchList.get(i + mNumOfMatches).home_name);
+                                            Log.d("nama away team", "onResponse: " + mMatchList.get(i + mNumOfMatches).away_name);
                                             //Assign Match Date
                                             if (match.isNull("strDate")) {
                                                 mMatchList.get(i + mNumOfMatches).date = "No Date Info";
@@ -218,14 +275,10 @@ public class MainActivity extends AppCompatActivity implements MatchAdapter.OnMa
                                             if (!match.isNull("strHomeGoalDetails")) {
                                                 String[] goalDetails = match.getString("strHomeGoalDetails").split(";");
                                                 mMatchList.get(i + mNumOfMatches).homeGoalDetails = new ArrayList<>(Arrays.asList(goalDetails));
-//                                                Log.d("HomeGoalDetails", mMatchList.get(i + mNumOfMatches).home_name+ " :" + Arrays.toString(goalDetails));
-//                                                Log.d("arraylist", String.valueOf(mMatchList.get(i + mNumOfMatches).homeGoalDetails));
                                             }
                                             if (!match.isNull("strAwayGoalDetails")) {
                                                 String[] goalDetails = match.getString("strAwayGoalDetails").split(";");
                                                 mMatchList.get(i + mNumOfMatches).awayGoalDetails = new ArrayList<>(Arrays.asList(goalDetails));
-//                                                Log.d("AwayGoalDetails", mMatchList.get(i + mNumOfMatches).away_name + " :" + Arrays.toString(goalDetails));
-//                                                Log.d("arraylist", String.valueOf(mMatchList.get(i + mNumOfMatches).awayGoalDetails));
                                             }
 
                                             //Assign Team Badge
