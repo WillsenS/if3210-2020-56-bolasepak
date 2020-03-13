@@ -23,6 +23,9 @@ public class StepCountService extends Service implements SensorEventListener {
         sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         sensor = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
         sensorManager.registerListener(this, sensor, SensorManager.SENSOR_DELAY_UI);
+        SharedPreferences sh = getSharedPreferences("ServiceStorage", MODE_APPEND);
+        int pastValues = sh.getInt("values", 0);
+        sendSensorValuesToActivity(pastValues);
         return START_STICKY;
     }
 
