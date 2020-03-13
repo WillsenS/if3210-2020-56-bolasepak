@@ -37,6 +37,6 @@ Pengguna juga dapat melihat detail tim untuk melihat 2 buah tab "SEBELUM" dan "S
 # Screenshot Aplikasi
 
 ![HomePage](https://pasteboard.co/IYVJJhN.png)
-![](https://pasteboard.co/IYVJXVj.png)
+![a](https://pasteboard.co/IYVJXVj.png)
 ![Detail Match](https://pasteboard.co/IYVKbSj.png)
-![](https://pasteboard.co/IYVKwqz.png)
+![b](https://pasteboard.co/IYVKwqz.png)
