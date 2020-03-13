@@ -36,4 +36,7 @@ Pengguna juga dapat melihat detail tim untuk melihat 2 buah tab "SEBELUM" dan "S
 
 # Screenshot Aplikasi
 
-![HomePage](https://drive.google.com/file/d/1cmsxs7Q9FU7JfkOdx2gBgim75OB17I-R/view?usp=sharing)
+![HomePage](https://pasteboard.co/IYVJJhN.png)
+![](https://pasteboard.co/IYVJXVj.png)
+![Detail Match](https://pasteboard.co/IYVKbSj.png)
+![](https://pasteboard.co/IYVKwqz.png)
