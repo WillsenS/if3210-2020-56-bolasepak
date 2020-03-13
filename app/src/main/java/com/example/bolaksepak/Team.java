@@ -46,6 +46,8 @@ public class Team implements Serializable {
         shots = t.shots;
         logo_url = t.logo_url;
         id = t.id;
-        goalDetails = new ArrayList<>(t.goalDetails);
+        if (t.goalDetails != null) {
+            goalDetails = new ArrayList<>(t.goalDetails);
+        }
     }
 }

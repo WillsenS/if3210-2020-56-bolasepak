@@ -19,6 +19,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.bolaksepak.Match;
 import com.example.bolaksepak.R;
 import com.example.bolaksepak.Team;
+import com.example.bolaksepak.adapter.MatchAdapter;
 import com.example.bolaksepak.api.matchschedule.MatchFetcherSingleton;
 import com.example.bolaksepak.utils.MatchTeamDataLoader;
 import com.google.android.material.tabs.TabLayout;
@@ -33,20 +34,21 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class TeamInfoActivity extends AppCompatActivity {
-    int mSelected = 0;
-    boolean mInitialRender = true;
-    Team mTeam;
-    private ImageView mHeaderLogo;
-    private TextView mHeaderTeamName;
     private static final MatchTeamDataLoader mDataLoader = new MatchTeamDataLoader();
     private static final String mGetTeamByNameUrl = "https://www.thesportsdb.com/api/v1/json/1/searchteams.php?t=";
     private static final String mGetLast5MatchByTeamId = "https://www.thesportsdb.com/api/v1/json/1/eventslast.php?id=";
     private static final String mGetNext5MatchByTeamId = "https://www.thesportsdb.com/api/v1/json/1/eventsnext.php?id=";
-    private static  final int SEBELUM = 0;
-    private static  final int SESUDAH = 1;
+    private static final int SEBELUM = 1;
+    private static final int SESUDAH = 0;
+    int mSelected = 0;
+    boolean mInitialRender = true;
+    Team mTeam;
     ArrayList<Match> mPastMatch = new ArrayList<>();
-    ArrayList<Match> mNextMatch  = new ArrayList<>();
+    ArrayList<Match> mNextMatch = new ArrayList<>();
+    private ImageView mHeaderLogo;
+    private TextView mHeaderTeamName;
     private Context mContext;
+    private MatchAdapter mMatchAdapter;
 
 
     @Override
@@ -113,12 +115,17 @@ public class TeamInfoActivity extends AppCompatActivity {
     }
 
     public void displayFragment() {
+
         Log.d("EVENT", "DISPLAYFRAG");
         MatchListFragment fragment;
         if (mSelected == SEBELUM) { //TODO: Fungsi Fetch nya belom dipanggil
-             fragment = MatchListFragment.newInstance(mPastMatch);
-        } else  { // (mSelected == SESUDAH)
-             fragment = MatchListFragment.newInstance(mNextMatch);
+            getLastMatchList();
+            mMatchAdapter = new MatchAdapter(mContext, mPastMatch, null);
+            fragment = MatchListFragment.newInstance(mPastMatch);
+        } else { // (mSelected == SESUDAH)
+            getNextMatchList();
+            mMatchAdapter = new MatchAdapter(mContext, mNextMatch, null);
+            fragment = MatchListFragment.newInstance(mNextMatch);
         }
 
         FragmentManager fragmentManager = getSupportFragmentManager();
@@ -150,19 +157,9 @@ public class TeamInfoActivity extends AppCompatActivity {
 
 
 
-//    public void getMatchListByTeamId(String id) {
-//
-//        String lastMatchurl = mGetLast5MatchByTeamId.concat(id);
-//        String nextMatchUrl = mGetNext5MatchByTeamId.concat(id);
-//
-//        getLastMatchList(lastMatchurl);
-//        getNextMatchList(nextMatchUrl);
-//
-//
-//    }
-
-
-    public void getLastMatchList(String url) {
+    public void getLastMatchList() {
+        String url = "https://www.thesportsdb.com/api/v1/json/1/eventslast.php?id=".concat(mTeam.id);
+        Log.d("", "getLastMatchList: " + url);
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
                 (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
                     @Override
@@ -244,7 +241,9 @@ public class TeamInfoActivity extends AppCompatActivity {
         MatchFetcherSingleton.getInstance(mContext).addToRequestQueue(jsonObjectRequest);
     }
 
-    public void getNextMatchList(String url) {
+    public void getNextMatchList() {
+        String url = "https://www.thesportsdb.com/api/v1/json/1/eventsnext.php?id=".concat(mTeam.id);
+        Log.d("", "getLastMatchList: " + url);
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
                 (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
                     @Override
@@ -356,7 +355,7 @@ public class TeamInfoActivity extends AppCompatActivity {
                         Log.d("ERROR FETCH URL: ", url);
                     }
                 });
-//        mMatchAdapter.notifyDataSetChanged();
+        mMatchAdapter.notifyDataSetChanged();
         MatchFetcherSingleton.getInstance(mContext).addToRequestQueue(jsonObjectRequest);
     }
 
