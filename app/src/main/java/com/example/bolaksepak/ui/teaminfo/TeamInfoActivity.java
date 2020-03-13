@@ -44,8 +44,8 @@ public class TeamInfoActivity extends AppCompatActivity {
     private static final String mGetNext5MatchByTeamId = "https://www.thesportsdb.com/api/v1/json/1/eventsnext.php?id=";
     private static  final int SEBELUM = 0;
     private static  final int SESUDAH = 1;
-    ArrayList<Match> mPastMatch;
-    ArrayList<Match> mNextMatch;
+    ArrayList<Match> mPastMatch = new ArrayList<>();
+    ArrayList<Match> mNextMatch  = new ArrayList<>();
     private Context mContext;
 
 
@@ -115,7 +115,7 @@ public class TeamInfoActivity extends AppCompatActivity {
     public void displayFragment() {
         Log.d("EVENT", "DISPLAYFRAG");
         MatchListFragment fragment;
-        if (mSelected == SEBELUM) {
+        if (mSelected == SEBELUM) { //TODO: Fungsi Fetch nya belom dipanggil
              fragment = MatchListFragment.newInstance(mPastMatch);
         } else  { // (mSelected == SESUDAH)
              fragment = MatchListFragment.newInstance(mNextMatch);
