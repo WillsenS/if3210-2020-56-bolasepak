@@ -1,12 +1,14 @@
 package com.example.bolaksepak.api.weather;
 
 public class weather {
+
+    public weather() {
+        super();
+    }
     private float id;
     private String main;
     private String description;
     private String icon;
-
-
     // Getter Methods
 
     public float getId() {
@@ -23,5 +25,25 @@ public class weather {
 
     public String getIcon() {
         return icon;
+    }
+
+    // Setter Methods
+
+
+
+    public void setId( float id ) {
+        this.id = id;
+    }
+
+    public void setMain( String main ) {
+        this.main = main;
+    }
+
+    public void setDescription( String description ) {
+        this.description = description;
+    }
+
+    public void setIcon( String icon ) {
+        this.icon = icon;
     }
 }

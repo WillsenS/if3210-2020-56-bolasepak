@@ -14,15 +14,14 @@ import com.example.bolaksepak.Match;
 import com.example.bolaksepak.R;
 import com.example.bolaksepak.Team;
 import com.example.bolaksepak.adapter.GoalDetailAdapter;
-import com.example.bolaksepak.api.weather.list;
+import com.example.bolaksepak.api.weather.WeatherAPI;
+import com.example.bolaksepak.api.weather.WeatherAPI;
 import com.example.bolaksepak.api.weather.weather;
-import com.example.bolaksepak.api.weather.weatherAPI;
+import com.example.bolaksepak.api.weather.jlist;
+import com.example.bolaksepak.api.weather.weather;
 import com.example.bolaksepak.api.weather.weatherDB;
 import com.example.bolaksepak.ui.teaminfo.TeamInfoActivity;
 import com.example.bolaksepak.utils.MatchTeamDataLoader;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -96,46 +95,62 @@ public class EventDetailActivity extends AppCompatActivity {
             mAwayGoalDetails.setAdapter(mAwayGoalAdapter);
             mAwayGoalDetails.setLayoutManager(new LinearLayoutManager(this));
         }
+
         getWeather("London");
 
     }
+
 
     public void getWeather(String city) {
         final String res= "";
         String API = "fc96c0a7669abfee97f8d1b30efca557";
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://api.openweathermap.org/data/2.5/")
+                .baseUrl("http://api.openweathermap.org/data/2.5/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         weatherDB weatherdb = retrofit.create(weatherDB.class);
 
-        Call<List<weatherAPI>> call = weatherdb.getWeather(city,"fc96c0a7669abfee97f8d1b30efca557");
-        call.enqueue(new Callback<List<weatherAPI>>() {
+        Call<WeatherAPI> call = weatherdb.getWeather(city,API);
+        call.enqueue(new Callback<WeatherAPI>() {
             @Override
-            public void onResponse(Call<List<weatherAPI>> call, Response<List<weatherAPI>> response) {
-                List<weatherAPI> forecast = response.body();
+            public void onResponse(Call<WeatherAPI> call, Response<WeatherAPI> response) {
+                WeatherAPI fg = response.body();
 
-                for (weatherAPI w : forecast) {
-                    list l = new list();
-                    weather wet = new weather();
-                    String res ="success";
-                    list result;
-                    result = w.getList();
-                    l = result;
-                    wet = l.getListWeather();
-                    res += wet.getMain();
-
+                for (int i=0; i<fg.getList().size(); i++) {
+                    String res ="";
+                    jlist j = fg.getList(0);
+                    weather g = j.getForecast(0);
+                    res = g.getMain();
                     mWeather.setText(res);
                     break;
                 }
             }
 
             @Override
-            public void onFailure(Call<List<weatherAPI>> call, Throwable t) {
+            public void onFailure(Call<WeatherAPI> call, Throwable t) {
                 mWeather.setText(t.getMessage());
             }
-
         });
+
+//        call.enqueue(new Callback<List<Weather>>() {
+//            @Override
+//            public void onResponse(Call<List<Weather>> call, Response<List<Weather>> response) {
+//                Weather f = response.body();
+//
+//                for (Weather w : f) {
+//                    String res ="m";
+//                    jlist j =  w.getList(1);
+//                    forecast g = j.getForecast(1);
+//                    res = g.getMain();
+//                    mWeather.setText(res);
+//                    break;
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(Call<List<Weather>> call, Throwable t) {
+//                mWeather.setText(t.getMessage());
+//            }
     }
 
     public void viewHomeTeam(View view) {

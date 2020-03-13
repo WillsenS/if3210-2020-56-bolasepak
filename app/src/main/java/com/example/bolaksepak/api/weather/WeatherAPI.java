@@ -1,17 +1,25 @@
 package com.example.bolaksepak.api.weather;
 
-public class weatherAPI {
+import java.util.ArrayList;
+import java.util.List;
+
+public class WeatherAPI {
     private String cod;
     private float message;
     private float cnt;
-    list list;
-    private City CityObject;
-
-
+    private List<jlist> list = new ArrayList<jlist>(100);
+    City CityObject;
     // Getter Methods
 
     public String getCod() {
         return cod;
+    }
+    public jlist getList(int w) {
+        return list.get(w);
+    }
+
+    public List<jlist> getList() {
+        return list;
     }
 
     public float getMessage() {
@@ -20,10 +28,6 @@ public class weatherAPI {
 
     public float getCnt() {
         return cnt;
-    }
-
-    public list getList() {
-        return list;
     }
 
     public City getCity() {
@@ -48,100 +52,10 @@ public class weatherAPI {
         this.CityObject = cityObject;
     }
 }
-
-class Clouds {
-    private float all;
-
-
-    // Getter Methods
-
-    public float getAll() {
-        return all;
-    }
-}
-
-class Wind {
-    private float speed;
-    private float deg;
-
-
-    // Getter Methods
-
-    public float getSpeed() {
-        return speed;
-    }
-
-    public float getDeg() {
-        return deg;
-    }
-}
-
-class Main {
-    private float temp;
-    private float feels_like;
-    private float temp_min;
-    private float temp_max;
-    private float pressure;
-    private float sea_level;
-    private float grnd_level;
-    private float humidity;
-    private float temp_kf;
-
-
-    // Getter Methods
-
-    public float getTemp() {
-        return temp;
-    }
-
-    public float getFeels_like() {
-        return feels_like;
-    }
-
-    public float getTemp_min() {
-        return temp_min;
-    }
-
-    public float getTemp_max() {
-        return temp_max;
-    }
-
-    public float getPressure() {
-        return pressure;
-    }
-
-    public float getSea_level() {
-        return sea_level;
-    }
-
-    public float getGrnd_level() {
-        return grnd_level;
-    }
-
-    public float getHumidity() {
-        return humidity;
-    }
-
-    public float getTemp_kf() {
-        return temp_kf;
-    }
-}
-
-class Sys {
-    private String pod;
-    // Getter Methods
-
-    public String getPod() {
-        return pod;
-    }
-
-    // Setter Methods
-}
-
 class City {
     private float id;
     private String name;
-    private Coord CoordObject;
+    Coord CoordObject;
     private String country;
     private float population;
     private float timezone;

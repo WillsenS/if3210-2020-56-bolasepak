@@ -14,7 +14,7 @@ public interface weatherDB {
     //api key: fc96c0a7669abfee97f8d1b30efca557
 
     @GET("forecast")
-    Call<List<weatherAPI>> getWeather(
+    Call<WeatherAPI> getWeather(
             @Query("q") String q,
             @Query("appid") String appid
     );
