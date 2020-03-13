@@ -99,7 +99,7 @@ public class MatchListFragment extends Fragment {
         super.onStop();
         RequestQueue queue = MatchFetcherSingleton.getInstance(mContext).getRequestQueue();
         if (queue !=null) {
-            queue.cancelAll(null);
+            queue.cancelAll(request -> true);
         }
     }
 

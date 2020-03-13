@@ -270,7 +270,7 @@ public class MainActivity extends AppCompatActivity implements MatchAdapter.OnMa
         super.onStop();
         RequestQueue queue = MatchFetcherSingleton.getInstance(this).getRequestQueue();
         if (queue != null) {
-            queue.cancelAll(null);
+            queue.cancelAll(request -> true);
         }
     }
 }

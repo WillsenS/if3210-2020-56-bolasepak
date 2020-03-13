@@ -12,26 +12,13 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.example.bolaksepak.Match;
+import com.android.volley.RequestQueue;
 import com.example.bolaksepak.R;
 import com.example.bolaksepak.Team;
-import com.example.bolaksepak.adapter.MatchAdapter;
 import com.example.bolaksepak.api.matchschedule.MatchFetcherSingleton;
 import com.example.bolaksepak.utils.MatchTeamDataLoader;
 import com.google.android.material.tabs.TabLayout;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-import java.util.ArrayList;
-import java.util.Arrays;
 
 public class TeamInfoActivity extends AppCompatActivity {
     private static final MatchTeamDataLoader mDataLoader = new MatchTeamDataLoader();
@@ -43,13 +30,11 @@ public class TeamInfoActivity extends AppCompatActivity {
     Team mTeam;
     private ImageView mHeaderLogo;
     private TextView mHeaderTeamName;
-    private Context mContext;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mContext = getApplicationContext();
         //Get Team Data from intent
         Team team = (Team) getIntent().getSerializableExtra("TEAM_DATA");
         assert team != null;
@@ -148,8 +133,12 @@ public class TeamInfoActivity extends AppCompatActivity {
     }
 
 
-
-
-
-
+    @Override
+    protected void onStop() {
+        super.onStop();
+        RequestQueue queue = MatchFetcherSingleton.getInstance(this).getRequestQueue();
+        if (queue != null) {
+            queue.cancelAll(request -> true);
+        }
+    }
 }
