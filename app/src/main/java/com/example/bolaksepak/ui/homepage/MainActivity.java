@@ -79,17 +79,17 @@ public class MainActivity extends AppCompatActivity implements MatchAdapter.OnMa
 
         serviceIntent = new Intent(MainActivity.this, com.example.bolaksepak.service.StepCountService.class);
         startService(serviceIntent);
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
         //Register BroadcastReceiver
         //to receive event from our service
         receiver = new StepServiceReceiver();
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction("UpdateSensorValues");
         registerReceiver(receiver, intentFilter);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
     }
 
     public void generateRecyclerViewMatchList() {
