@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.bolaksepak.Match;
 import com.example.bolaksepak.R;
+import com.example.bolaksepak.utils.MatchTeamDataLoader;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -20,13 +21,12 @@ import java.util.ArrayList;
 public class MatchAdapter extends RecyclerView.Adapter<MatchAdapter.MatchHolder> {
     private Context mContext;
     private ArrayList<Match> mMatchList;
-    private int[] mImages;
     private OnMatchListener mOnMatchListener;
+    private static final MatchTeamDataLoader dataLoader = new MatchTeamDataLoader();
 
-    public MatchAdapter(Context ctx, ArrayList<Match> matchList, int[] images, OnMatchListener onMatchListener) {
+    public MatchAdapter(Context ctx, ArrayList<Match> matchList, OnMatchListener onMatchListener) {
         this.mContext = ctx;
         this.mMatchList = matchList;
-        this.mImages = images;
         this.mOnMatchListener = onMatchListener;
     }
 
@@ -45,33 +45,10 @@ public class MatchAdapter extends RecyclerView.Adapter<MatchAdapter.MatchHolder>
         holder.match_date.setText(mMatchList.get(position).date);
         holder.home_name.setText(mMatchList.get(position).home_name);
         holder.away_name.setText(mMatchList.get(position).away_name);
-        if (mMatchList.get(position).home_score == -1 || mMatchList.get(position).away_score == -1) {
-            holder.home_score.setText("-");
-            holder.away_score.setText("-");
-        } else {
-            holder.home_score.setText(String.valueOf(mMatchList.get(position).home_score));
-            holder.away_score.setText(String.valueOf(mMatchList.get(position).away_score));
-        }
+        dataLoader.validateAndSetNumberData(mMatchList.get(position).home_score, mMatchList.get(position).away_score, holder.home_score, holder.away_score);
+        dataLoader.loadImage(mMatchList.get(position).home_logo_url, holder.home_logo);
+        dataLoader.loadImage(mMatchList.get(position).away_logo_url, holder.away_logo);
 
-        if (! mMatchList.get(position).home_logo_url.equals("")) {
-            Picasso.get().load(mMatchList.get(position).home_logo_url).
-                    placeholder(R.drawable.placeholder)
-                    .error(R.drawable.placeholder)
-                    .into(holder.home_logo);
-        } else {
-            Picasso.get().load(R.drawable.placeholder)
-                    .into(holder.home_logo);
-        }
-
-        if (! mMatchList.get(position).away_logo_url.equals("")) {
-            Picasso.get().load(mMatchList.get(position).away_logo_url).
-                    placeholder(R.drawable.placeholder)
-                    .error(R.drawable.placeholder)
-                    .into(holder.away_logo);
-        } else {
-            Picasso.get().load(R.drawable.placeholder)
-                    .into(holder.away_logo);
-        }
     }
 
     @Override

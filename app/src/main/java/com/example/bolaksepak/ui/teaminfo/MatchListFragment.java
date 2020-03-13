@@ -1,5 +1,6 @@
 package com.example.bolaksepak.ui.teaminfo;
 
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -15,6 +16,7 @@ import com.example.bolaksepak.adapter.MatchAdapter;
 import com.example.bolaksepak.R;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -23,21 +25,23 @@ import java.util.ArrayList;
  */
 public class MatchListFragment extends Fragment {
 
-    RecyclerView MatchListView;
-    ArrayList<Match> MatchList = new ArrayList<>();
-    int[] clubImages = new int[2];
-    MatchAdapter md;
+
+
+    RecyclerView mMatchListView;
+    ArrayList<Match> mMatchList;
+    MatchAdapter mMatchAdapter;
+    private Context mContext;
+    private static final String MATCH_LIST_FLAG = "MATCH_LIST";
 
 
     public MatchListFragment() {
         // Required empty public constructor
     }
 
-    public static MatchListFragment newInstance(int[] images) {
+    public static MatchListFragment newInstance(ArrayList<Match> match) {
         MatchListFragment fragment = new MatchListFragment();
         Bundle args = new Bundle();
-        args.putInt("ClubImage1", images[0]);
-        args.putInt("ClubImage2", images[1]);
+        args.putSerializable(MATCH_LIST_FLAG, match);
         fragment.setArguments(args);
         return fragment;
     }
@@ -45,25 +49,20 @@ public class MatchListFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        for (int i = 0; i < MatchList.size(); i++) {
-            MatchList.set(i, new Match("99 Maret 2020", "Club 1", 1, "Club 2", 2));
-        }
-
+        Bundle args = getArguments();
+        mMatchList = (ArrayList<Match>) args.getSerializable(MATCH_LIST_FLAG);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_match_list, container, false);
-        MatchListView = (RecyclerView) rootView.findViewById(R.id.match_list_fragment);
-        Bundle args = getArguments();
-        int image1 = args.getInt("ClubImage1");
-        int image2 = args.getInt("ClubImage2");
-        clubImages[0] = image1;
-        clubImages[1] = image2;
-        this.md = new MatchAdapter(getContext(), MatchList, clubImages, null);
-        MatchListView.setAdapter(this.md);
-        MatchListView.setLayoutManager(new LinearLayoutManager(getContext()));
+        mMatchListView = (RecyclerView) rootView.findViewById(R.id.match_list_fragment);
+        this.mMatchAdapter = new MatchAdapter(getContext(), mMatchList,null);
+        mMatchListView.setAdapter(this.mMatchAdapter);
+        mMatchListView.setLayoutManager(new LinearLayoutManager(getContext()));
         return rootView;
     }
+
+
 }

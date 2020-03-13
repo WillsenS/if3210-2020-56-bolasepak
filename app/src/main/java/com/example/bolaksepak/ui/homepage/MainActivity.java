@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity implements MatchAdapter.OnMa
     private ArrayList<Match> mMatchList = new ArrayList<>();
     private int[] mClubImages;
     private int mNumOfMatches = 0;
-    private MatchAdapter mMatchAdapter = new MatchAdapter(this, mMatchList, mClubImages, this);
+    private MatchAdapter mMatchAdapter = new MatchAdapter(this, mMatchList, this);
     private ProgressBar pb;
     private String mTeamSearch = "Barcelona";
 
