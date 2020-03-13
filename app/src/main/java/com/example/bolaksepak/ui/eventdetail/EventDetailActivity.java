@@ -14,14 +14,20 @@ import com.example.bolaksepak.Match;
 import com.example.bolaksepak.R;
 import com.example.bolaksepak.Team;
 import com.example.bolaksepak.adapter.GoalDetailAdapter;
+import com.example.bolaksepak.api.weather.TeamDB;
+import com.example.bolaksepak.api.weather.Teamname;
 import com.example.bolaksepak.api.weather.WeatherAPI;
 import com.example.bolaksepak.api.weather.WeatherAPI;
+import com.example.bolaksepak.api.weather.teams;
 import com.example.bolaksepak.api.weather.weather;
 import com.example.bolaksepak.api.weather.jlist;
 import com.example.bolaksepak.api.weather.weather;
 import com.example.bolaksepak.api.weather.weatherDB;
 import com.example.bolaksepak.ui.teaminfo.TeamInfoActivity;
 import com.example.bolaksepak.utils.MatchTeamDataLoader;
+
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -95,9 +101,34 @@ public class EventDetailActivity extends AppCompatActivity {
             mAwayGoalDetails.setAdapter(mAwayGoalAdapter);
             mAwayGoalDetails.setLayoutManager(new LinearLayoutManager(this));
         }
+        getCity(m.home_name);
+    }
 
-        getWeather("London");
 
+    public void getCity(String hometeam) {
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("https://www.thesportsdb.com/api/v1/json/1/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        TeamDB teamDB = retrofit.create(TeamDB.class);
+
+        Call<Teamname> call = teamDB.getTeam(hometeam);
+        call.enqueue(new Callback<Teamname>() {
+            @Override
+            public void onResponse(Call<Teamname> call, Response<Teamname> response) {
+                Teamname fg = response.body();
+                teams t = fg.getTeams(0);
+                String city = t.getStrStadiumLocation();
+                //String[] part = city.split(",");
+                //city = part[1];
+                getWeather(city);
+            }
+
+            @Override
+            public void onFailure(Call<Teamname> call, Throwable t) {
+                mWeather.setText("Error");
+            }
+        });
     }
 
 
@@ -117,40 +148,25 @@ public class EventDetailActivity extends AppCompatActivity {
                 WeatherAPI fg = response.body();
 
                 for (int i=0; i<fg.getList().size(); i++) {
-                    String res ="";
-                    jlist j = fg.getList(0);
-                    weather g = j.getForecast(0);
-                    res = g.getMain();
-                    mWeather.setText(res);
-                    break;
+                    jlist j = fg.getList(i);
+                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+                    LocalDateTime APIdate = LocalDateTime.parse(j.getDt_txt(),formatter);
+                    LocalDateTime now = LocalDateTime.now();
+                    if(now.isBefore(APIdate)) {
+                        j = fg.getList(i-1);
+                        weather g = j.getForecast(0);
+                        String res = g.getMain();
+                        mWeather.setText(res);
+                        break;
+                    }
                 }
             }
 
             @Override
             public void onFailure(Call<WeatherAPI> call, Throwable t) {
-                mWeather.setText(t.getMessage());
+                mWeather.setText("No Weather Data");
             }
         });
-
-//        call.enqueue(new Callback<List<Weather>>() {
-//            @Override
-//            public void onResponse(Call<List<Weather>> call, Response<List<Weather>> response) {
-//                Weather f = response.body();
-//
-//                for (Weather w : f) {
-//                    String res ="m";
-//                    jlist j =  w.getList(1);
-//                    forecast g = j.getForecast(1);
-//                    res = g.getMain();
-//                    mWeather.setText(res);
-//                    break;
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(Call<List<Weather>> call, Throwable t) {
-//                mWeather.setText(t.getMessage());
-//            }
     }
 
     public void viewHomeTeam(View view) {
