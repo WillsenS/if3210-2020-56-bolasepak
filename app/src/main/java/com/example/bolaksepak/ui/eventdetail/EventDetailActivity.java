@@ -10,10 +10,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.android.volley.RequestQueue;
 import com.example.bolaksepak.Match;
 import com.example.bolaksepak.R;
 import com.example.bolaksepak.Team;
 import com.example.bolaksepak.adapter.GoalDetailAdapter;
+import com.example.bolaksepak.api.matchschedule.MatchFetcherSingleton;
 import com.example.bolaksepak.ui.teaminfo.TeamInfoActivity;
 import com.example.bolaksepak.utils.MatchTeamDataLoader;
 
@@ -95,5 +97,14 @@ public class EventDetailActivity extends AppCompatActivity {
         Intent intent = new Intent(this, TeamInfoActivity.class);
         intent.putExtra("TEAM_DATA", new Team(mMatch, AWAY));
         startActivity(intent);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        RequestQueue queue = MatchFetcherSingleton.getInstance(this).getRequestQueue();
+        if (queue != null) {
+            queue.cancelAll(null);
+        }
     }
 }
