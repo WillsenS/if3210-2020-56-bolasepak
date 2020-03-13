@@ -141,8 +141,6 @@ public class MainActivity extends AppCompatActivity implements MatchAdapter.OnMa
                                 if (!response.isNull(apiKey)) {
                                     JSONArray matchJSONArray = response.getJSONArray(apiKey);
                                     if (matchJSONArray.length() > 0) {
-                                        Log.i("mNumOfMatches", String.valueOf(mNumOfMatches));
-                                        Log.i("length of mMatchList array", String.valueOf(mMatchList.size()));
                                         for (int i = 0; i < matchJSONArray.length(); i++) {
                                             //TODO: Rubah jadi while, kalo val dari key strSport nya bukan Soccer gausah ditambah ke list
                                             mMatchList.add(new Match());
@@ -187,20 +185,20 @@ public class MainActivity extends AppCompatActivity implements MatchAdapter.OnMa
                                             //Assign Goal Details
                                             if (!match.isNull("strHomeGoalDetails")) {
                                                 String[] goalDetails = match.getString("strHomeGoalDetails").split(";");
-//                                                mMatchList.get(i + mNumOfMatches).homeGoalDetails = (ArrayList<String>) Arrays.asList(goalDetails);
                                                 mMatchList.get(i + mNumOfMatches).homeGoalDetails = new ArrayList<>(Arrays.asList(goalDetails));
-                                                Log.d("HomeGoalDetails", "onResponse: " + Arrays.toString(goalDetails));
+//                                                Log.d("HomeGoalDetails", mMatchList.get(i + mNumOfMatches).home_name+ " :" + Arrays.toString(goalDetails));
+//                                                Log.d("arraylist", String.valueOf(mMatchList.get(i + mNumOfMatches).homeGoalDetails));
                                             }
                                             if (!match.isNull("strAwayGoalDetails")) {
                                                 String[] goalDetails = match.getString("strAwayGoalDetails").split(";");
                                                 mMatchList.get(i + mNumOfMatches).awayGoalDetails = new ArrayList<>(Arrays.asList(goalDetails));
-                                                Log.d("AwayGoalDetails", "onResponse: " + Arrays.toString(goalDetails));
+//                                                Log.d("AwayGoalDetails", mMatchList.get(i + mNumOfMatches).away_name + " :" + Arrays.toString(goalDetails));
+//                                                Log.d("arraylist", String.valueOf(mMatchList.get(i + mNumOfMatches).awayGoalDetails));
                                             }
 
                                             //Assign Team Badge
                                             setTeamBadge(mGetTeamByNameUrl + URLEncoder.encode((mMatchList.get(i + mNumOfMatches).home_name), "UTF-8"), i + mNumOfMatches, 1);
                                             setTeamBadge(mGetTeamByNameUrl + URLEncoder.encode((mMatchList.get(i + mNumOfMatches).away_name), "UTF-8"), i + mNumOfMatches, 2);
-                                            Log.d("Match index: ", String.valueOf(i + mNumOfMatches + 1));
 
                                         }
                                         mNumOfMatches += matchJSONArray.length();

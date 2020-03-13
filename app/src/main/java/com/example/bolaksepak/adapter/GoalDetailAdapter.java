@@ -1,6 +1,7 @@
 package com.example.bolaksepak.adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,6 +35,8 @@ public class GoalDetailAdapter extends RecyclerView.Adapter<GoalDetailAdapter.Go
 
     @Override
     public void onBindViewHolder(@NonNull GoalDetailHolder holder, int position) {
+//        Log.d("Goals: ", "onBindViewHolder: " + mGoalList.toString());
+        Log.d("Goalee", "onBindViewHolder: " + mGoalList.get(position));
         holder.goalItem.setText((CharSequence) mGoalList.get(position));
     }
 

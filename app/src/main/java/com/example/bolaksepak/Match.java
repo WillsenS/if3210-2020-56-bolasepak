@@ -59,8 +59,12 @@ public class Match implements Serializable {
         away_logo_url = m.away_logo_url;
         home_id = m.home_id;
         away_id = m.away_id;
-        homeGoalDetails = new ArrayList<>(m.homeGoalDetails);
-        awayGoalDetails = new ArrayList<>(m.awayGoalDetails);
+        if (m.homeGoalDetails !=null) {
+            homeGoalDetails = new ArrayList<>(m.homeGoalDetails);
+        }
+        if (m.awayGoalDetails != null ) {
+            awayGoalDetails = new ArrayList<>(m.awayGoalDetails);
+        }
     }
 
     @NonNull

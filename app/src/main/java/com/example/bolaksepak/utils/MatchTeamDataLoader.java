@@ -26,11 +26,14 @@ public class MatchTeamDataLoader {
     }
 
     public void validateAndSetNumberData(int homeNumVal, int awayNumVal, TextView homeTextView, TextView awayTextView) {
-        if (homeNumVal == -1 || awayNumVal == -1) {
+        if (homeNumVal == -1) {
             homeTextView.setText("-");
-            awayTextView.setText("-");
         } else {
             homeTextView.setText(String.valueOf(homeNumVal));
+        }
+        if (awayNumVal == -1) {
+            awayTextView.setText("-");
+        } else {
             awayTextView.setText(String.valueOf(awayNumVal));
         }
 
