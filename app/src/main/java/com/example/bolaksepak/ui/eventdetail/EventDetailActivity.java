@@ -14,8 +14,21 @@ import com.example.bolaksepak.Match;
 import com.example.bolaksepak.R;
 import com.example.bolaksepak.Team;
 import com.example.bolaksepak.adapter.GoalDetailAdapter;
+import com.example.bolaksepak.api.weather.list;
+import com.example.bolaksepak.api.weather.weather;
+import com.example.bolaksepak.api.weather.weatherAPI;
+import com.example.bolaksepak.api.weather.weatherDB;
 import com.example.bolaksepak.ui.teaminfo.TeamInfoActivity;
 import com.example.bolaksepak.utils.MatchTeamDataLoader;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class EventDetailActivity extends AppCompatActivity {
     private Match mMatch;
@@ -28,6 +41,7 @@ public class EventDetailActivity extends AppCompatActivity {
     private TextView mAwayName;
     private TextView mHomeShots;
     private TextView mAwayShots;
+    private TextView mWeather;
     private RecyclerView mHomeGoalDetails;
     private RecyclerView mAwayGoalDetails;
     private GoalDetailAdapter mHomeGoalAdapter;
@@ -58,6 +72,7 @@ public class EventDetailActivity extends AppCompatActivity {
         mAwayShots = findViewById(R.id.away_shots);
         mHomeGoalDetails = findViewById(R.id.home_goal_detail);
         mAwayGoalDetails = findViewById(R.id.away_goal_detail);
+        mWeather = findViewById(R.id.textView4);
 
         // Set the layout with values
         mMatchDate.setText(m.date);
@@ -81,9 +96,47 @@ public class EventDetailActivity extends AppCompatActivity {
             mAwayGoalDetails.setAdapter(mAwayGoalAdapter);
             mAwayGoalDetails.setLayoutManager(new LinearLayoutManager(this));
         }
+        getWeather("London");
 
     }
 
+    public void getWeather(String city) {
+        final String res= "";
+        String API = "fc96c0a7669abfee97f8d1b30efca557";
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("https://api.openweathermap.org/data/2.5/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        weatherDB weatherdb = retrofit.create(weatherDB.class);
+
+        Call<List<weatherAPI>> call = weatherdb.getWeather(city,"fc96c0a7669abfee97f8d1b30efca557");
+        call.enqueue(new Callback<List<weatherAPI>>() {
+            @Override
+            public void onResponse(Call<List<weatherAPI>> call, Response<List<weatherAPI>> response) {
+                List<weatherAPI> forecast = response.body();
+
+                for (weatherAPI w : forecast) {
+                    list l = new list();
+                    weather wet = new weather();
+                    String res ="success";
+                    list result;
+                    result = w.getList();
+                    l = result;
+                    wet = l.getListWeather();
+                    res += wet.getMain();
+
+                    mWeather.setText(res);
+                    break;
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<weatherAPI>> call, Throwable t) {
+                mWeather.setText(t.getMessage());
+            }
+
+        });
+    }
 
     public void viewHomeTeam(View view) {
         Intent intent = new Intent(this, TeamInfoActivity.class);

@@ -21,6 +21,7 @@ public class Match implements Serializable {
     public String away_id;
     public String[] homeGoalDetails;
     public String[] awayGoalDetails;
+    //public String weather;
 
 
     public Match() {
@@ -35,6 +36,7 @@ public class Match implements Serializable {
         away_logo_url = "";
         home_id = "";
         away_id = "";
+        //weather = "";
 
     }
 
@@ -58,6 +60,7 @@ public class Match implements Serializable {
         away_logo_url = m.away_logo_url;
         home_id = m.home_id;
         away_id = m.away_id;
+        //weather = m.weather;
         if (m.homeGoalDetails != null && m.homeGoalDetails.length > 0) {
             homeGoalDetails = new String[m.homeGoalDetails.length];
             System.arraycopy(m.homeGoalDetails, 0, homeGoalDetails, 0, m.homeGoalDetails.length);
