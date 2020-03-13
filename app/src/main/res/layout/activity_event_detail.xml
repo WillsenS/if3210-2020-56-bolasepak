@@ -98,6 +98,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
         android:text="SHOTS"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.502"
@@ -111,6 +112,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:text="GOALS"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/title_shots" />
@@ -138,21 +140,23 @@
         app:layout_constraintTop_toTopOf="@+id/title_shots" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView3"
-        android:layout_width="wrap_content"
+        android:id="@+id/home_goal_detail"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="9dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
         app:layout_constraintEnd_toStartOf="@+id/title_goals"
-        app:layout_constraintTop_toBottomOf="@+id/title_goals" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/home_shots" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView4"
-        android:layout_width="wrap_content"
+        android:id="@+id/away_goal_detail"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="9dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/title_goals"
-        app:layout_constraintTop_toBottomOf="@+id/title_goals" />
+        app:layout_constraintTop_toBottomOf="@+id/away_shots" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

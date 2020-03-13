@@ -18,15 +18,15 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 
 public class MatchAdapter extends RecyclerView.Adapter<MatchAdapter.MatchHolder> {
-    Context ctx;
-    ArrayList<Match> mMatchList;
-    int[] mImages;
-    OnMatchListener mOnMatchListener;
+    private Context mContext;
+    private ArrayList<Match> mMatchList;
+    private int[] mImages;
+    private OnMatchListener mOnMatchListener;
 
-    public MatchAdapter(Context ctx, ArrayList<Match> mMatchList, int[] mImages, OnMatchListener onMatchListener) {
-        this.ctx = ctx;
-        this.mMatchList = mMatchList;
-        this.mImages = mImages;
+    public MatchAdapter(Context ctx, ArrayList<Match> matchList, int[] images, OnMatchListener onMatchListener) {
+        this.mContext = ctx;
+        this.mMatchList = matchList;
+        this.mImages = images;
         this.mOnMatchListener = onMatchListener;
     }
 
@@ -34,7 +34,7 @@ public class MatchAdapter extends RecyclerView.Adapter<MatchAdapter.MatchHolder>
     @NonNull
     @Override
     public MatchAdapter.MatchHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        LayoutInflater inflater = LayoutInflater.from(this.ctx);
+        LayoutInflater inflater = LayoutInflater.from(this.mContext);
         View MatchView = inflater.inflate(R.layout.match, parent, false);
         return new MatchHolder(MatchView, mOnMatchListener);
     }
@@ -43,7 +43,7 @@ public class MatchAdapter extends RecyclerView.Adapter<MatchAdapter.MatchHolder>
     @Override
     public void onBindViewHolder(@NonNull MatchAdapter.MatchHolder holder, int position) {
         holder.match_date.setText(mMatchList.get(position).date);
-        holder.team1name.setText(mMatchList.get(position).home_name);
+        holder.home_name.setText(mMatchList.get(position).home_name);
         holder.away_name.setText(mMatchList.get(position).away_name);
         if (mMatchList.get(position).home_score == -1 || mMatchList.get(position).away_score == -1) {
             holder.home_score.setText("-");
@@ -82,7 +82,7 @@ public class MatchAdapter extends RecyclerView.Adapter<MatchAdapter.MatchHolder>
 
 
     static class MatchHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        TextView team1name;
+        TextView home_name;
         TextView away_name;
         TextView home_score;
         TextView away_score;
@@ -93,7 +93,7 @@ public class MatchAdapter extends RecyclerView.Adapter<MatchAdapter.MatchHolder>
 
         MatchHolder(@NonNull View itemView, OnMatchListener onMatchListener) {
             super(itemView);
-            team1name = (TextView) itemView.findViewById(R.id.home_club_name);
+            home_name = (TextView) itemView.findViewById(R.id.home_club_name);
             away_name = (TextView) itemView.findViewById(R.id.away_club_name);
             home_score = (TextView) itemView.findViewById(R.id.home_club_score);
             away_score = (TextView) itemView.findViewById(R.id.away_club_score);
