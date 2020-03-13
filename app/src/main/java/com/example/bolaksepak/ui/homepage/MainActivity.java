@@ -7,10 +7,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
-import android.widget.ProgressBar;
-
-import com.android.volley.Request;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -25,15 +21,6 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.bolaksepak.Match;
-import com.example.bolaksepak.adapter.MatchAdapter;
-import com.example.bolaksepak.R;
-import com.example.bolaksepak.api.matchschedule.MatchFetcherSingleton;
-import com.example.bolaksepak.ui.eventdetail.EventDetailActivity;
-
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import com.example.bolaksepak.R;
 import com.example.bolaksepak.adapter.MatchAdapter;
 import com.example.bolaksepak.api.matchschedule.MatchFetcherSingleton;
@@ -158,6 +145,8 @@ public class MainActivity extends AppCompatActivity implements MatchAdapter.OnMa
     }
 
     private void getMatches(String url, int type) { //type = 1 -> prev, type = 2 => next
+        //TODO: Pecah jadi 2 method, getLastMatch, sama getNextMatch biar bisa dipake ulang di TeamInfoActivity
+        //TODO: Bikin Interface MatchFetcher
         String apiKey;
         if (type == 1) {
             apiKey = "results";
@@ -180,6 +169,7 @@ public class MainActivity extends AppCompatActivity implements MatchAdapter.OnMa
                                             JSONObject match = matchJSONArray.getJSONObject(i);
                                             //Assign data to match object
                                             //TODO: Semua ini dan validasinya pindahin ke kelasnya aja biar lebih clean
+
                                             mMatchList.get(i + mNumOfMatches).home_name = match.getString("strHomeTeam");
                                             mMatchList.get(i + mNumOfMatches).home_id = match.getString("idHomeTeam");
                                             mMatchList.get(i + mNumOfMatches).away_id = match.getString("idAwayTeam");
