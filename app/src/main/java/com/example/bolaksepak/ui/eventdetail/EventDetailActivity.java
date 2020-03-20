@@ -115,7 +115,7 @@ public class EventDetailActivity extends AppCompatActivity {
 
     public void getCity(String hometeam) {
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://www.thesportsdb.com/api/v1/json/1/")
+                .baseUrl("http://134.209.97.218:5050/api/v1/json/1/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         TeamDB teamDB = retrofit.create(TeamDB.class);

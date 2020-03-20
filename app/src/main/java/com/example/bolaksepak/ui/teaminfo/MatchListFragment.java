@@ -44,7 +44,7 @@ import java.util.Objects;
 public class MatchListFragment extends Fragment implements MatchAdapter.OnMatchListener {
 
 
-    private static final String mGetTeamByNameUrl = "https://www.thesportsdb.com/api/v1/json/1/searchteams.php?t=";
+    private static final String mGetTeamByNameUrl = "http://134.209.97.218:5050/api/v1/json/1/searchteams.php?t=";
     private static final String TYPE = "TYPE";
     private static final String TEAM_ID = "TEAM_ID";
     private static final int SEBELUM = 1;
@@ -120,7 +120,7 @@ public class MatchListFragment extends Fragment implements MatchAdapter.OnMatchL
 
     private void getLastMatchList() {
         mMatch.clear();
-        String url = "https://www.thesportsdb.com/api/v1/json/1/eventslast.php?id=".concat(id);
+        String url = "http://134.209.97.218:5050/api/v1/json/1/eventslast.php?id=".concat(id);
         Log.d("getLastMatchList", url);
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
                 (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
@@ -205,7 +205,7 @@ public class MatchListFragment extends Fragment implements MatchAdapter.OnMatchL
 
     private void getNextMatchList() {
         mMatch.clear();
-        String url = "https://www.thesportsdb.com/api/v1/json/1/eventsnext.php?id=".concat(id);
+        String url = "http://134.209.97.218:5050/api/v1/json/1/eventsnext.php?id=".concat(id);
         Log.d("getNextMatchList", url);
         Log.d("", "getLastMatchList: " + url);
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest

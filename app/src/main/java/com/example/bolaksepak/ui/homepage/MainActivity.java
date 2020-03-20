@@ -58,9 +58,9 @@ import rx.subjects.PublishSubject;
 
 
 public class MainActivity extends AppCompatActivity implements MatchAdapter.OnMatchListener {
-    private static final String mGetTeamByNameUrl = "https://www.thesportsdb.com/api/v1/json/1/searchteams.php?t=";
-    private static final String mGetLast5MatchByTeamId = "https://www.thesportsdb.com/api/v1/json/1/eventslast.php?id=";
-    private static final String mGetNext5MatchByTeamId = "https://www.thesportsdb.com/api/v1/json/1/eventsnext.php?id=";
+    private static final String mGetTeamByNameUrl = "http://134.209.97.218:5050/api/v1/json/1/searchteams.php?t=";
+    private static final String mGetLast5MatchByTeamId = "http://134.209.97.218:5050/api/v1/json/1/eventslast.php?id=";
+    private static final String mGetNext5MatchByTeamId = "http://134.209.97.218:5050/api/v1/json/1/eventsnext.php?id=";
     private Context mContext;
     private Activity mActivity;
     private RecyclerView mMatchListView;
